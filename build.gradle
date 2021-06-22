@@ -105,6 +105,7 @@ jar {
             'tweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
             'TweakOrder': 0,
             'FMLCorePluginContainsFMLMod': 'net.ccbluex.liquidbounce.injection.forge.MixinLoader',
+            'FMLAT': 'mashiro_at.cfg',
             'Manifest-Version': 1.0
     )
 }

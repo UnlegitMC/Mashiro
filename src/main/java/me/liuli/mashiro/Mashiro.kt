@@ -1,5 +1,7 @@
 package me.liuli.mashiro
 
+import me.liuli.mashiro.event.EventManager
+
 object Mashiro {
     @JvmStatic
     val name="Mashiro"
@@ -9,4 +11,14 @@ object Mashiro {
 
     @JvmStatic
     val author="Liulihaocai"
+
+    lateinit var eventManager: EventManager
+
+    fun init(){
+
+    }
+
+    fun load(){
+        eventManager=EventManager()
+    }
 }

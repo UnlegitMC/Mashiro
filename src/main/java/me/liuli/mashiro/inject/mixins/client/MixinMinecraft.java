@@ -14,4 +14,14 @@ public class MixinMinecraft {
     private void createDisplay(CallbackInfo callbackInfo) {
         Display.setTitle(Mashiro.getName()+" v"+Mashiro.getVersion()+" by "+Mashiro.getAuthor());
     }
+
+    @Inject(method = "run", at = @At("HEAD"))
+    private void init(CallbackInfo callbackInfo) {
+        Mashiro.INSTANCE.init();
+    }
+
+    @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;checkGLError(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.AFTER))
+    private void startGame(CallbackInfo callbackInfo) {
+        Mashiro.INSTANCE.load();
+    }
 }
