@@ -19,7 +19,7 @@ class EventManager {
                 try {
                     lm.method.invoke(lm.listener, event)
                 } catch (t: Throwable) {
-                    t.printStackTrace()
+                    Exception("An error occurred while handling the event: ",t).printStackTrace()
                 }
             }
         }

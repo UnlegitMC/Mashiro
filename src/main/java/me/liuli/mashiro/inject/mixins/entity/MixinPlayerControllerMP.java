@@ -16,6 +16,7 @@ public class MixinPlayerControllerMP {
     private void attackEntity(EntityPlayer entityPlayer, Entity targetEntity, CallbackInfo callbackInfo) {
         if(targetEntity==null)
             return;
+
         Mashiro.eventManager.callEvent(new AttackEvent(targetEntity));
     }
 }

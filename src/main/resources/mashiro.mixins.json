@@ -4,6 +4,16 @@
   "refmap": "mashiro.mixins.refmap.json",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "client.MixinMinecraft"
+    "client.MixinMinecraft",
+    "entity.MixinEntity",
+    "entity.MixinEntityLivingBase",
+    "entity.MixinEntityPlayer",
+    "entity.MixinEntityPlayerSP",
+    "entity.MixinPlayerControllerMP",
+    "gui.MixinGuiInGame",
+    "gui.MixinGuiSpectator",
+    "other.MixinNetworkManager",
+    "render.MixinEntityRenderer",
+    "render.MixinFontRenderer"
   ]
 }
