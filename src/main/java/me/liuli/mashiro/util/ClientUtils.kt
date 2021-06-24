@@ -1,7 +1,9 @@
 package me.liuli.mashiro.util
 
+import com.google.gson.JsonObject
 import me.liuli.mashiro.Mashiro
 import net.minecraft.client.settings.GameSettings
+import net.minecraft.util.IChatComponent
 import org.apache.logging.log4j.LogManager
 import java.lang.reflect.Field
 
@@ -35,5 +37,19 @@ object ClientUtils : MinecraftInstance() {
             }
         } catch (ignored: IllegalAccessException) {
         }
+    }
+
+    fun displayAlert(message: String) {
+        displayChatMessage("§7[${Mashiro.coloredName}§7] §f$message")
+    }
+
+    fun displayChatMessage(message: String) {
+        if (mc.thePlayer == null) {
+            logInfo("[CHAT] $message")
+            return
+        }
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("text", message)
+        mc.thePlayer.addChatMessage(IChatComponent.Serializer.jsonToComponent(jsonObject.toString()))
     }
 }

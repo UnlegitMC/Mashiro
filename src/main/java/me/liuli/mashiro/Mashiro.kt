@@ -9,6 +9,8 @@ object Mashiro {
     @JvmStatic
     val name="Mashiro"
     @JvmStatic
+    val coloredName="§eM§fashiro"
+    @JvmStatic
     val version="0.0.1"
     @JvmStatic
     val author="Liulihaocai"
