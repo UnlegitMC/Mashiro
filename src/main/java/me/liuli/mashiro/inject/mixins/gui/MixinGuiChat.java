@@ -77,6 +77,7 @@ public abstract class MixinGuiChat {
         if (Mashiro.commandManager.getLatestAutoComplete().length != 0) callbackInfo.cancel();
     }
 
+    // TODO: 这个有bug
     @Inject(method = "drawScreen", at = @At("RETURN"))
     public void drawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
         if (Mashiro.commandManager.getLatestAutoComplete().length > 0 && !inputField.getText().isEmpty() && inputField.getText().startsWith(Mashiro.commandManager.getPrefix())) {

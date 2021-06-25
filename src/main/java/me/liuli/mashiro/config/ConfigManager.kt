@@ -3,7 +3,7 @@ package me.liuli.mashiro.config
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import me.liuli.mashiro.event.EventHandler
+import me.liuli.mashiro.event.EventMethod
 import me.liuli.mashiro.event.Listener
 import me.liuli.mashiro.event.UpdateEvent
 import me.liuli.mashiro.util.ClientUtils
@@ -83,7 +83,7 @@ class ConfigManager : MinecraftInstance(),Listener {
         ClientUtils.logInfo("Config $nowConfig.json saved.")
     }
 
-    @EventHandler
+    @EventMethod
     fun onUpdate(event: UpdateEvent){
         if(timer.hasTimePassed(60*1000L)){ // save it every minute
             ClientUtils.logInfo("Autosaving $nowConfig.json")

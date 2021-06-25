@@ -7,7 +7,7 @@ class CommandManager {
     val defaultPrefix="."
 
     var prefix=defaultPrefix
-    val commands = mutableListOf<Command>()
+    val commands=HashMap<String,Command>()
     var latestAutoComplete: Array<String> = emptyArray()
 
     init {
@@ -22,25 +22,28 @@ class CommandManager {
         }
     }
 
-    fun handleCommand(msg: String){
-        val input=if(msg.startsWith(prefix)){
-            msg
-        }else{
-            prefix+msg
+    fun registerCommand(command: Command){
+        commands[command.command.toLowerCase()] = command
+        command.subCommand.forEach {
+            commands[it.toLowerCase()] = command
         }
-        val args = input.split(" ").toTypedArray()
-
-        for (command in commands) {
-            if (args[0].equals(prefix + command.command, ignoreCase = true)) {
-                command.exec(args.copyOfRange(1,args.size))
-                return
-            }
-        }
-
-        ClientUtils.displayAlert("Command not found. Type ${prefix}help to view all commands.")
     }
 
-    fun registerCommand(command: Command) = commands.add(command)
+    fun getCommand(name: String): Command? {
+        return commands[name.toLowerCase()]
+    }
+
+    fun handleCommand(msg: String){
+        val input=if(msg.startsWith(prefix)){ msg.substring(1) }else{ msg }
+        val args = input.split(" ").toTypedArray()
+        val command=getCommand(args[0])
+        if(command==null){
+            ClientUtils.displayAlert("Command not found. Type ${prefix}help to view all commands.")
+            return
+        }
+
+        command.exec(args.copyOfRange(1,args.size))
+    }
 
     /**
      * Updates the [latestAutoComplete] array based on the provided [input].
@@ -70,16 +73,12 @@ class CommandManager {
                 tabCompletions?.toTypedArray()
             } else {
                 val rawInput = input.substring(1)
-                commands.filter { it.command.startsWith(rawInput, true) }
+                commands.filter { it.value.command.startsWith(rawInput, true) }
                     .map {
-                        this.prefix + it.command
+                        this.prefix + it.value.command
                     }.toTypedArray()
             }
         }
         return null
-    }
-
-    private fun getCommand(name: String): Command? {
-        return commands.find { it.command.equals(name, ignoreCase = true) }
     }
 }

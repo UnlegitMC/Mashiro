@@ -7,7 +7,7 @@ class EventManager {
 
     fun registerListener(listener: Listener) {
         for (method in listener.javaClass.declaredMethods) {
-            if (method.isAnnotationPresent(EventHandler::class.java)) {
+            if (method.isAnnotationPresent(EventMethod::class.java)) {
                 methods.add(ListenerMethod(method, listener))
             }
         }

@@ -4,7 +4,7 @@ import me.liuli.mashiro.Mashiro
 import me.liuli.mashiro.util.ClientUtils
 import me.liuli.mashiro.util.MinecraftInstance
 
-abstract class Command(val command: String, val description: String) : MinecraftInstance() {
+abstract class Command(val command: String, val description: String, val subCommand: Array<String> = emptyArray()) : MinecraftInstance() {
     abstract fun exec(args: Array<String>)
 
     open fun tabComplete(args: Array<String>): List<String> {
