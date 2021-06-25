@@ -13,5 +13,5 @@ abstract class Command(val command: String, val description: String) : Minecraft
 
     protected fun chat(msg: String) = ClientUtils.displayAlert(msg)
 
-    protected fun chatSyntax(syntax: String) = ClientUtils.displayAlert("Syntax: ${Mashiro.commandManager.prefix}$syntax")
+    protected fun chatSyntax(syntax: String) = ClientUtils.displayAlert("Syntax: ${Mashiro.commandManager.prefix}$command $syntax")
 }

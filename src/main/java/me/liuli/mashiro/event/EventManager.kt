@@ -6,7 +6,7 @@ class EventManager {
     private val methods=mutableListOf<ListenerMethod>()
 
     fun registerListener(listener: Listener) {
-        for (method in listener.javaClass.methods) {
+        for (method in listener.javaClass.declaredMethods) {
             if (method.isAnnotationPresent(EventHandler::class.java)) {
                 methods.add(ListenerMethod(method, listener))
             }
@@ -15,7 +15,7 @@ class EventManager {
 
     fun callEvent(event: Event) {
         for (lm in methods) {
-            if (lm.listener.active && lm.isMatchEvent(event)) {
+            if (lm.listener.listen() && lm.isMatchEvent(event)) {
                 try {
                     lm.method.invoke(lm.listener, event)
                 } catch (t: Throwable) {
@@ -27,6 +27,11 @@ class EventManager {
 }
 
 class ListenerMethod(val method: Method, val listener: Listener) {
+    init {
+        if(!method.isAccessible)
+            method.isAccessible=true
+    }
+
     fun isMatchEvent(event: Event): Boolean {
         return method.parameterTypes[0] == event.javaClass
     }

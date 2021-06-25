@@ -9,11 +9,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import org.lwjgl.input.Keyboard;
@@ -29,9 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinMinecraft {
     @Shadow
     public GuiScreen currentScreen;
-
-    @Shadow
-    public boolean skipRenderWorld;
 
     @Shadow
     private int leftClickCounter;
@@ -50,18 +45,6 @@ public class MixinMinecraft {
 
     @Shadow
     public PlayerControllerMP playerController;
-
-    @Shadow
-    public int displayWidth;
-
-    @Shadow
-    public int displayHeight;
-
-    @Shadow
-    public int rightClickDelayTimer;
-
-    @Shadow
-    public GameSettings gameSettings;
 
     @Inject(method = "createDisplay", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/Display;setTitle(Ljava/lang/String;)V", shift = At.Shift.AFTER))
     private void createDisplay(CallbackInfo callbackInfo) {
@@ -121,6 +104,15 @@ public class MixinMinecraft {
             } else {
                 this.playerController.resetBlockRemoving();
             }
+        }
+    }
+
+    @Inject(method = "shutdown", at = @At("HEAD"))
+    private void shutdown(CallbackInfo callbackInfo) {
+        try{
+            Mashiro.INSTANCE.shutdown();
+        }catch (Throwable t){
+            t.printStackTrace();
         }
     }
 }

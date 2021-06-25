@@ -1,6 +1,7 @@
 package me.liuli.mashiro
 
 import me.liuli.mashiro.command.CommandManager
+import me.liuli.mashiro.config.ConfigManager
 import me.liuli.mashiro.event.EventManager
 import me.liuli.mashiro.module.ModuleManager
 import me.liuli.mashiro.util.ClientUtils
@@ -16,6 +17,7 @@ object Mashiro {
     val author="Liulihaocai"
 
     lateinit var eventManager: EventManager
+    lateinit var configManager: ConfigManager
     lateinit var commandManager: CommandManager
     lateinit var moduleManager: ModuleManager
 
@@ -27,10 +29,19 @@ object Mashiro {
     fun load(){
         ClientUtils.logInfo("Loading $name v$version")
 
+        configManager = ConfigManager()
+        eventManager.registerListener(configManager)
+
         commandManager = CommandManager()
 
         moduleManager = ModuleManager()
 
+        configManager.reload()
+
         ClientUtils.disableFastRender()
+    }
+
+    fun shutdown(){
+        configManager.save()
     }
 }

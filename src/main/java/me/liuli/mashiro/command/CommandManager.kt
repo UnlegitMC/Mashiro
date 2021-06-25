@@ -4,7 +4,9 @@ import me.liuli.mashiro.util.ClientUtils
 import org.reflections.Reflections
 
 class CommandManager {
-    var prefix="."
+    val defaultPrefix="."
+
+    var prefix=defaultPrefix
     val commands = mutableListOf<Command>()
     var latestAutoComplete: Array<String> = emptyArray()
 
@@ -30,7 +32,7 @@ class CommandManager {
 
         for (command in commands) {
             if (args[0].equals(prefix + command.command, ignoreCase = true)) {
-                command.exec(args)
+                command.exec(args.copyOfRange(1,args.size))
                 return
             }
         }
