@@ -35,6 +35,7 @@ object Mashiro {
         commandManager = CommandManager()
 
         moduleManager = ModuleManager()
+        eventManager.registerListener(moduleManager)
 
         configManager.reload()
 

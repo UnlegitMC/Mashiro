@@ -32,6 +32,8 @@ open class Module(val name: String, val description: String, val category: Modul
     open fun onDisable() {}
 
     // backend
+    var animate=0.0
+
     fun chat(msg: String) = ClientUtils.displayAlert(msg)
 
     fun toggle(){

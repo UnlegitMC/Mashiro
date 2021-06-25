@@ -4,10 +4,14 @@ import me.liuli.mashiro.Mashiro
 import me.liuli.mashiro.event.EventMethod
 import me.liuli.mashiro.event.KeyEvent
 import me.liuli.mashiro.event.Listener
+import me.liuli.mashiro.util.ClientUtils
+import org.lwjgl.input.Keyboard
 import org.reflections.Reflections
 
 class ModuleManager : Listener {
     val modules=mutableListOf<Module>()
+
+    private var pendingKeyBindModule:Module?=null
 
     init {
         val reflections = Reflections("${this.javaClass.`package`.name}.modules")
@@ -27,7 +31,6 @@ class ModuleManager : Listener {
 
         // module command
         val values=module.getValues()
-        println("NAME ${module.name} VAL ${values.size}")
         if(module.command&&values.isNotEmpty()){
             Mashiro.commandManager.registerCommand(ModuleCommand(module, values))
         }
@@ -43,7 +46,19 @@ class ModuleManager : Listener {
 
     @EventMethod
     private fun onKey(event: KeyEvent) {
+        if(pendingKeyBindModule!=null){
+            pendingKeyBindModule!!.keyBind=event.key
+            ClientUtils.displayAlert("Bound module §l${pendingKeyBindModule!!.name}§r to key §l${Keyboard.getKeyName(event.key)}§r.")
+            pendingKeyBindModule=null
+            return
+        }
+
         modules.filter { it.keyBind == event.key }.forEach { it.toggle() }
+    }
+
+    fun pendKeyBind(module: Module){
+        pendingKeyBindModule=module
+        ClientUtils.displayAlert("Press ANY key to set §l${module.name}§r key bind.")
     }
 
     override fun listen() = true

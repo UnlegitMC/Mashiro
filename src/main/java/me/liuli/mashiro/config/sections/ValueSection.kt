@@ -24,13 +24,16 @@ class ValueSection : ConfigSection("value") {
         val json=JsonObject()
 
         Mashiro.moduleManager.modules.forEach { module ->
-            val moduleJson=JsonObject()
+            val values=module.getValues()
+            if(values.isNotEmpty()){
+                val moduleJson=JsonObject()
 
-            module.getValues().forEach {  value ->
-                moduleJson.add(value.name,value.toJson())
+                values.forEach {  value ->
+                    moduleJson.add(value.name,value.toJson())
+                }
+
+                json.add(module.name,moduleJson)
             }
-
-            json.add(module.name,moduleJson)
         }
 
         return json
