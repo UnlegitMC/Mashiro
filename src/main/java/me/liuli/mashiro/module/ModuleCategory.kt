@@ -6,5 +6,6 @@ enum class ModuleCategory(val displayName: String) {
     PLAYER("Player"),
     WORLD("World"),
     RENDER("Render"),
-    MISC("Misc")
+    MISC("Misc"),
+    CLIENT("Client")
 }

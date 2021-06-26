@@ -17,6 +17,7 @@ class ConfigManager : MinecraftInstance(),Listener {
     val gson = GsonBuilder().setPrettyPrinting().create()
     val rootPath=File(mc.mcDataDir,"Mashiro")
     val configPath=File(rootPath,"configs")
+    val configSetFile=File(rootPath,"config.json")
 
     private val sections=mutableListOf<ConfigSection>()
     private val timer=TheTimer()
@@ -63,6 +64,8 @@ class ConfigManager : MinecraftInstance(),Listener {
         if(!configFile.exists())
             save()
 
+        saveConfigSet()
+
         ClientUtils.logInfo("Config $nowConfig.json loaded.")
     }
 
@@ -80,7 +83,30 @@ class ConfigManager : MinecraftInstance(),Listener {
         val writer = BufferedWriter(OutputStreamWriter(FileOutputStream(configFile), StandardCharsets.UTF_8))
         writer.write(gson.toJson(config))
         writer.close()
+
+        saveConfigSet()
+
         ClientUtils.logInfo("Config $nowConfig.json saved.")
+    }
+
+    fun loadDefault(){
+        val configSet=if(configSetFile.exists()){ JsonParser().parse(BufferedReader(FileReader(configSetFile))).asJsonObject }else{ JsonObject() }
+
+        load(if(configSet.has("file")){
+            configSet.get("file").asString
+        }else{
+            "default"
+        })
+    }
+
+    fun saveConfigSet(){
+        val configSet=JsonObject()
+
+        configSet.addProperty("file",nowConfig)
+
+        val writer = BufferedWriter(OutputStreamWriter(FileOutputStream(configSetFile), StandardCharsets.UTF_8))
+        writer.write(gson.toJson(configSet))
+        writer.close()
     }
 
     @EventMethod

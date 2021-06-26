@@ -37,7 +37,7 @@ object Mashiro {
         moduleManager = ModuleManager()
         eventManager.registerListener(moduleManager)
 
-        configManager.reload()
+        configManager.loadDefault()
 
         ClientUtils.disableFastRender()
     }

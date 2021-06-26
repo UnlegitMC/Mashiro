@@ -23,12 +23,16 @@ class ModuleSection : ConfigSection("module") {
 
             if(moduleJson.has("keybind"))
                 module.keyBind=moduleJson.get("keybind").asInt
+
+            if(moduleJson.has("array"))
+                module.array=moduleJson.get("array").asBoolean
         }
 
         Mashiro.moduleManager.modules.filter { !settedModules.contains(it) }
             .forEach { // reset module settings that dont contains in the config
                 it.state=it.defaultOn
                 it.keyBind=it.defaultKeyBind
+                it.array=it.defaultArray
             }
     }
 
@@ -39,6 +43,7 @@ class ModuleSection : ConfigSection("module") {
             val moduleJson=JsonObject()
             moduleJson.addProperty("toggle",it.state)
             moduleJson.addProperty("keybind",it.keyBind)
+            moduleJson.addProperty("array",it.array)
             json.add(it.name,moduleJson)
         }
 

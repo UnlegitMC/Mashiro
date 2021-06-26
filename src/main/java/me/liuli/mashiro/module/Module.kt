@@ -7,9 +7,10 @@ import me.liuli.mashiro.util.MinecraftInstance
 import org.lwjgl.input.Keyboard
 
 open class Module(val name: String, val description: String, val category: ModuleCategory, val command: Boolean = true,
-                  var keyBind: Int = Keyboard.CHAR_NONE, val canToggle: Boolean = true, val defaultOn: Boolean = false) : MinecraftInstance(),Listener {
+                  var keyBind: Int = Keyboard.CHAR_NONE, val canToggle: Boolean = true, val defaultOn: Boolean = false, var array: Boolean = true) : MinecraftInstance(),Listener {
 
     val defaultKeyBind=keyBind
+    val defaultArray=array
 
     var state=defaultOn
        set(state){

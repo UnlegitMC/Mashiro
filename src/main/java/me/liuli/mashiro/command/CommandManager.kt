@@ -42,7 +42,12 @@ class CommandManager {
             return
         }
 
-        command.exec(args.copyOfRange(1,args.size))
+        try {
+            command.exec(args.copyOfRange(1,args.size))
+        }catch (e: Exception){
+            e.printStackTrace()
+            ClientUtils.displayAlert("An error occurred while executing the command($e)")
+        }
     }
 
     /**

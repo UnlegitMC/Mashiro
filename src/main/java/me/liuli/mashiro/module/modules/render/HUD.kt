@@ -30,8 +30,9 @@ class HUD : Module("HUD","Display hud of the client", ModuleCategory.RENDER, def
         val blank=fontRenderer.FONT_HEIGHT*0.5f
         GL11.glPushMatrix()
         GL11.glTranslatef(sr.scaledWidth.toFloat(),0f,0f)
-        Mashiro.moduleManager.modules.filter { it.state||it.animate!=0.0 }
-                .sortedBy { -fontRenderer.getStringWidth(it.name) }.forEach { module ->
+        val modules=Mashiro.moduleManager.modules.filter { (it.state||it.animate!=0.0)&&it.array }
+            .sortedBy { -fontRenderer.getStringWidth(it.name) }
+        modules.forEach { module ->
             if(module.state){
                 module.animate=1.0.coerceAtMost(module.animate + pct)
             }else{
@@ -41,12 +42,17 @@ class HUD : Module("HUD","Display hud of the client", ModuleCategory.RENDER, def
             GL11.glPushMatrix()
             val width=fontRenderer.getStringWidth(module.name)+blank*2
             val height=fontRenderer.FONT_HEIGHT+blank
-            GL11.glTranslated(-width*if(module.state){ EaseUtils.easeOutQuad(module.animate) }
-                else{ EaseUtils.easeInQuad(module.animate) },0.0,0.0)
+            GL11.glTranslated(-width*if(module.state){ EaseUtils.easeOutCubic(module.animate) }
+                else{ EaseUtils.easeInCubic(module.animate) },0.0,0.0)
             RenderUtils.drawRect(0f,0f,width,height,ColorUtils.darker(ColorUtils.reAlpha(color,130),0.25f))
             fontRenderer.drawString(module.name,blank.toInt(),(blank*0.6).toInt(),color.rgb)
-            //draw outline(border)
-            RenderUtils.drawRect(0f,height-1,width,height,color)
+            //draw outline
+            val nextWidth=try {
+                fontRenderer.getStringWidth(modules[modules.indexOf(module)+1].name)+blank*2f-1
+            }catch (e: IndexOutOfBoundsException){
+                0f
+            }
+            RenderUtils.drawRect(0f,height-1,width-nextWidth,height,color)
             RenderUtils.drawRect(0f,0f,1f,height,color)
             GL11.glPopMatrix()
             GL11.glTranslatef(0f,fontRenderer.FONT_HEIGHT+blank,0f)
