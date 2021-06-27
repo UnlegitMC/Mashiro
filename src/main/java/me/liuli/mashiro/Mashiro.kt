@@ -40,6 +40,7 @@ object Mashiro {
         eventManager.registerListener(moduleManager)
 
         fontManager = FontManager()
+        fontManager.loadFonts()
 
         configManager.loadDefault()
 

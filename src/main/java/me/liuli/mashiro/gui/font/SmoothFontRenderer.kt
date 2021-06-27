@@ -1,5 +1,7 @@
 package me.liuli.mashiro.gui.font
 
+import me.liuli.mashiro.Mashiro
+import me.liuli.mashiro.util.ClientUtils
 import me.liuli.mashiro.util.MinecraftInstance
 import me.liuli.mashiro.util.render.RenderUtils
 import net.minecraft.client.Minecraft
@@ -11,6 +13,8 @@ import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.GL11
 import java.awt.*
 import java.awt.image.BufferedImage
+import java.io.File
+import javax.imageio.ImageIO
 
 /**
  * @author Liulihaocai
@@ -19,21 +23,32 @@ import java.awt.image.BufferedImage
  * @param font AWT字体
  * @param doNormalInit 预渲染英文字符，如果是图标字体填false
  * @param defaultHeight 默认字体高度
+ * @param enableCache 使用字体缓存
  */
-class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boolean = true, val defaultHeight: Float = mc.fontRendererObj.FONT_HEIGHT.toFloat()) : MinecraftInstance() {
+class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boolean = true,
+                         val defaultHeight: Float = mc.fontRendererObj.FONT_HEIGHT.toFloat(), val enableCache: Boolean = true) : MinecraftInstance() {
     private lateinit var fontMetrics: FontMetrics
 
     private val chars=HashMap<Char, FontChar>()
+    private val cacheDir=File(Mashiro.fontManager.fontCacheDir,"${font.fontName.toLowerCase().replace(" ","_")}-${font.size}")
 
     init {
+        val loadTime=System.currentTimeMillis()
+
         initFontMertics()
+
+        if(enableCache&&!cacheDir.exists())
+            cacheDir.mkdirs()
 
         if(doNormalInit){
             // 先把英文渲染好,其他的被动渲染
+            loadChar(' ')
             prepareCharImages('0','9')
             prepareCharImages('a','z')
             prepareCharImages('A','Z')
         }
+
+        ClientUtils.logInfo("Font ${font.fontName} loaded in ${System.currentTimeMillis()-loadTime}ms!")
     }
 
     /**
@@ -63,9 +78,42 @@ class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boole
      * 初始化单个字符图片
      */
     private fun loadChar(char: Char): FontChar {
-        val fc=renderCharImage(char)
+        val fc=if(enableCache){
+            loadCharImageFromCache(char)
+        }else{
+            renderCharImage(char)
+        }
         chars[char] = fc
         return fc
+    }
+
+    /**
+     * 从本地缓存读取字符图片
+     * 没有则渲染
+     */
+    private fun loadCharImageFromCache(char: Char): FontChar {
+        val charImageFile=getCharCacheFile(char)
+        return if(charImageFile.exists()){
+            FontChar(char, ImageIO.read(charImageFile))
+        }else{
+            saveFontCharToCache(renderCharImage(char))
+        }
+    }
+
+    /**
+     * 将渲染好的FontChar保存至缓存
+     * @return 传入的FontChar
+     */
+    private fun saveFontCharToCache(fontChar: FontChar): FontChar {
+        ImageIO.write(fontChar.bufImg,"png",getCharCacheFile(fontChar.char))
+        return fontChar
+    }
+
+    /**
+     * 获取char对应的缓存文件
+     */
+    private fun getCharCacheFile(char: Char): File {
+        return File(cacheDir,"char-${char.toInt()}.png")
     }
 
     /**

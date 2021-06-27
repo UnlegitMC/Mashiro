@@ -21,13 +21,14 @@ class HUD : Module("HUD","Display hud of the client", ModuleCategory.RENDER, def
         val pct = (time - lastUpdate) / 800.0
         lastUpdate=time
         val sr=ScaledResolution(mc)
-        val fontRenderer=mc.fontRendererObj
+        val fontRenderer=Mashiro.fontManager.font
+        val fontHeight=10f
 
-        fontRenderer.drawString("M",10,10,ColorUtils.mashiroRainbow(1).rgb)
-        fontRenderer.drawString("ashiro",10+fontRenderer.getStringWidth("M"),10, Color.WHITE.rgb)
+        fontRenderer.renderString("M",10f,10f,ColorUtils.mashiroRainbow(1),15f)
+        fontRenderer.renderString("ashiro",10+fontRenderer.getStringWidth("M",15f),10f, Color.WHITE,15f)
 
         var index=0
-        val blank=fontRenderer.FONT_HEIGHT*0.5f
+        val blank=fontHeight*0.5f
         GL11.glPushMatrix()
         GL11.glTranslatef(sr.scaledWidth.toFloat(),0f,0f)
         val modules=Mashiro.moduleManager.modules.filter { (it.state||it.animate!=0.0)&&it.array }
@@ -40,22 +41,22 @@ class HUD : Module("HUD","Display hud of the client", ModuleCategory.RENDER, def
             }
             val color=ColorUtils.mashiroRainbow(index+1)
             GL11.glPushMatrix()
-            val width=fontRenderer.getStringWidth(module.name)+blank*2
-            val height=fontRenderer.FONT_HEIGHT+blank
+            val width=fontRenderer.getStringWidth(module.name,fontHeight)+blank*2
+            val height=fontHeight+blank
             GL11.glTranslated(-width*if(module.state){ EaseUtils.easeOutCubic(module.animate) }
                 else{ EaseUtils.easeInCubic(module.animate) },0.0,0.0)
             RenderUtils.drawRect(0f,0f,width,height,ColorUtils.darker(ColorUtils.reAlpha(color,130),0.25f))
-            fontRenderer.drawString(module.name,blank.toInt(),(blank*0.6).toInt(),color.rgb)
+            fontRenderer.renderString(module.name,blank,blank*0.6f,color,fontHeight)
             //draw outline
             val nextWidth=try {
-                fontRenderer.getStringWidth(modules[modules.indexOf(module)+1].name)+blank*2f-1
+                fontRenderer.getStringWidth(modules[modules.indexOf(module)+1].name,fontHeight)+blank*2f-1
             }catch (e: IndexOutOfBoundsException){
                 0f
             }
             RenderUtils.drawRect(0f,height-1,width-nextWidth,height,color)
             RenderUtils.drawRect(0f,0f,1f,height,color)
             GL11.glPopMatrix()
-            GL11.glTranslatef(0f,fontRenderer.FONT_HEIGHT+blank,0f)
+            GL11.glTranslatef(0f,fontHeight+blank,0f)
             index++
         }
         GL11.glPopMatrix()

@@ -23,8 +23,6 @@ class ModuleManager : Listener {
                 e.printStackTrace()
             }
         }
-
-        modules.sortBy { it.name }
     }
 
     fun registerModule(module: Module){
