@@ -11,12 +11,14 @@ import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.GL11
 import java.awt.*
 import java.awt.image.BufferedImage
-import java.io.File
-import javax.imageio.ImageIO
 
 /**
  * @author Liulihaocai
  * render AWT font in minecraft
+ *
+ * @param font AWT字体
+ * @param doNormalInit 预渲染英文字符，如果是图标字体填false
+ * @param defaultHeight 默认字体高度
  */
 class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boolean = true, val defaultHeight: Float = mc.fontRendererObj.FONT_HEIGHT.toFloat()) : MinecraftInstance() {
     private lateinit var fontMetrics: FontMetrics
@@ -26,18 +28,27 @@ class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boole
     init {
         initFontMertics()
 
-        // 先把英文渲染好,其他的被动渲染
-        prepareCharImages('0','9')
-        prepareCharImages('a','z')
-        prepareCharImages('A','Z')
+        if(doNormalInit){
+            // 先把英文渲染好,其他的被动渲染
+            prepareCharImages('0','9')
+            prepareCharImages('a','z')
+            prepareCharImages('A','Z')
+        }
     }
 
+    /**
+     * 设置图片渲染hint
+     */
     private fun putHints(graphics: Graphics2D){
         graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON)
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     }
 
+    /**
+     * 初始化FontMetrics
+     * 和LB的每次渲染获取一次比，性能好点？
+     */
     private fun initFontMertics(){
         val graphics = BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).graphics as Graphics2D
 
@@ -47,12 +58,19 @@ class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boole
         fontMetrics = graphics.fontMetrics
     }
 
+    /**
+     * @param char 字符
+     * 初始化单个字符图片
+     */
     private fun loadChar(char: Char): FontChar {
         val fc=renderCharImage(char)
         chars[char] = fc
         return fc
     }
 
+    /**
+     * 渲染字符图片
+     */
     private fun renderCharImage(char: Char): FontChar {
         var charWidth = fontMetrics.charWidth(char) + 8
         if (charWidth <= 0)
@@ -72,6 +90,12 @@ class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boole
         return FontChar(char, fontImage)
     }
 
+    /**
+     * @param start 开始字符
+     * @param stop 结束字符
+     * 如果需要初始化单个直接loadChar(char)就行
+     * 预初始化字符图片
+     */
     private fun prepareCharImages(start: Char, stop: Char){
         val startAscii=start.toInt().coerceAtMost(stop.toInt())
         val stopAscii=stop.toInt().coerceAtLeast(start.toInt())
@@ -81,6 +105,9 @@ class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boole
         }
     }
 
+    /**
+     * 获取字符串会渲染成的宽度
+     */
     fun getStringWidth(text: String, height: Float = defaultHeight):Float{
         var width=0f
 
@@ -91,15 +118,25 @@ class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boole
         return width
     }
 
+    /**
+     * 获取字符宽度
+     */
     fun getCharWidth(char: Char, height: Float = defaultHeight):Float{
         val fontChar=chars[char] ?: loadChar(char)
         return fontChar.width*(height/fontChar.height)
     }
 
+    /**
+     * 获取字符图片宽度
+     */
     fun getCharImageWidth(char: Char) = (chars[char] ?: loadChar(char)).width
 
     /**
-     * @return width of the string
+     * @param text 字符串
+     * @param color 颜色，字符串里不支持MC颜色码
+     * @param height 字符高度，宽度会自动按比例缩放
+     *
+     * @return 字符串宽度
      */
     fun renderString(text: String, x: Float, y: Float, color: Color, height: Float = defaultHeight):Float{
         GL11.glPushMatrix()
@@ -128,7 +165,10 @@ class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boole
     }
 
     /**
-     * @return width
+     * @param char 字符
+     * @param height 字符高度，宽度会自动按比例缩放
+     *
+     * @return 单个字符宽度
      */
     fun renderChar(char: Char, x: Float, y: Float, height: Float = defaultHeight):Float{
         val fontChar=chars[char] ?: loadChar(char)
@@ -153,6 +193,10 @@ class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boole
         return width
     }
 
+    /**
+     * @param char 对应的字符
+     * @param bufImg 渲染出的字符图片
+     */
     class FontChar(val char: Char, val bufImg: BufferedImage){
         val resourceLoc = ResourceLocation("mashiro/font/char-${char.toInt()}")
         val width=bufImg.width
