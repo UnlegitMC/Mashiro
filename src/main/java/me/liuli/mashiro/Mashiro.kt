@@ -3,6 +3,7 @@ package me.liuli.mashiro
 import me.liuli.mashiro.command.CommandManager
 import me.liuli.mashiro.config.ConfigManager
 import me.liuli.mashiro.event.EventManager
+import me.liuli.mashiro.gui.font.FontManager
 import me.liuli.mashiro.module.ModuleManager
 import me.liuli.mashiro.util.ClientUtils
 
@@ -20,6 +21,7 @@ object Mashiro {
     lateinit var configManager: ConfigManager
     lateinit var commandManager: CommandManager
     lateinit var moduleManager: ModuleManager
+    lateinit var fontManager: FontManager
 
     fun init(){
         ClientUtils.logInfo("Initialize $name v$version")
@@ -36,6 +38,8 @@ object Mashiro {
 
         moduleManager = ModuleManager()
         eventManager.registerListener(moduleManager)
+
+        fontManager = FontManager()
 
         configManager.loadDefault()
 
