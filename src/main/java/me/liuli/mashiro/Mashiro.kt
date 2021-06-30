@@ -3,6 +3,7 @@ package me.liuli.mashiro
 import me.liuli.mashiro.command.CommandManager
 import me.liuli.mashiro.config.ConfigManager
 import me.liuli.mashiro.event.EventManager
+import me.liuli.mashiro.gui.alt.AltManager
 import me.liuli.mashiro.gui.font.FontManager
 import me.liuli.mashiro.module.ModuleManager
 import me.liuli.mashiro.util.ClientUtils
@@ -13,7 +14,7 @@ object Mashiro {
     @JvmStatic
     val coloredName="§eM§fashiro"
     @JvmStatic
-    val version="0.0.1"
+    val version="0.0.2"
     @JvmStatic
     val author="Liulihaocai"
 
@@ -22,6 +23,7 @@ object Mashiro {
     lateinit var commandManager: CommandManager
     lateinit var moduleManager: ModuleManager
     lateinit var fontManager: FontManager
+    lateinit var altManager: AltManager
 
     fun init(){
         ClientUtils.logInfo("Initialize $name v$version")
@@ -41,6 +43,8 @@ object Mashiro {
 
         fontManager = FontManager()
         fontManager.loadFonts()
+
+        altManager = AltManager()
 
         configManager.loadDefault()
 

@@ -21,15 +21,15 @@ class FontManager {
     }
 
     fun loadFonts(){
-        font=SmoothFontRenderer(getFont(128)) // 字体原图清晰度，调高了卡，调低了模糊
+        font=SmoothFontRenderer(getFont(64)) // 字体原图清晰度，调高了卡，调低了模糊
     }
 
     private fun getFont(size: Int): Font {
         return try {
             val inputStream: InputStream = FileInputStream(fontFile)
             var awtClientFont = Font.createFont(Font.TRUETYPE_FONT, inputStream)
-            awtClientFont = awtClientFont.deriveFont(Font.PLAIN, size.toFloat())
             inputStream.close()
+            awtClientFont = awtClientFont.deriveFont(Font.PLAIN, size.toFloat())
             awtClientFont
         } catch (e: Exception) {
             e.printStackTrace()

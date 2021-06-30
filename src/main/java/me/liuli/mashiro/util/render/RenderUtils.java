@@ -35,8 +35,6 @@ import static org.lwjgl.opengl.GL11.*;
 public final class RenderUtils extends MinecraftInstance {
     private static final Map<Integer, Boolean> glCapMap = new HashMap<>();
 
-    public static int deltaTime;
-
     private static final int[] DISPLAY_LISTS_2D = new int[4];
 
     static {
@@ -909,11 +907,5 @@ public final class RenderUtils extends MinecraftInstance {
         GL11.glDisable(2848);
         GL11.glShadeModel(7424);
         Gui.drawRect(0, 0, 0, 0, 0);
-    }
-
-    private static final long startTime=System.currentTimeMillis();
-
-    public static Color arrayRainbow(int offset){
-        return new Color(Color.HSBtoRGB((float) ((double) ((System.currentTimeMillis()-startTime)/10000F)+ Math.sin((double) (((System.currentTimeMillis()-startTime)/100F)%50) + offset) / 50.0 * 1.6) % 1.0f, 0.5f, 1.0f));
     }
 }
