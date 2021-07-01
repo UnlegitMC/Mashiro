@@ -2,13 +2,18 @@ package me.liuli.mashiro
 
 import me.liuli.mashiro.command.CommandManager
 import me.liuli.mashiro.config.ConfigManager
+import me.liuli.mashiro.config.FileManager
 import me.liuli.mashiro.event.EventManager
 import me.liuli.mashiro.gui.alt.AltManager
+import me.liuli.mashiro.gui.client.GuiLoadingClient
 import me.liuli.mashiro.gui.font.FontManager
 import me.liuli.mashiro.module.ModuleManager
-import me.liuli.mashiro.util.ClientUtils
+import me.liuli.mashiro.ultralight.UltraLightManager
+import me.liuli.mashiro.util.MinecraftInstance
+import me.liuli.mashiro.util.client.ClientUtils
+import net.minecraft.client.gui.GuiMainMenu
 
-object Mashiro {
+object Mashiro : MinecraftInstance() {
     @JvmStatic
     val name="Mashiro"
     @JvmStatic
@@ -24,6 +29,8 @@ object Mashiro {
     lateinit var moduleManager: ModuleManager
     lateinit var fontManager: FontManager
     lateinit var altManager: AltManager
+    lateinit var fileManager: FileManager
+    lateinit var ultraLightManager: UltraLightManager
 
     fun init(){
         ClientUtils.logInfo("Initialize $name v$version")
@@ -31,24 +38,42 @@ object Mashiro {
     }
 
     fun load(){
-        ClientUtils.logInfo("Loading $name v$version")
+        val gui=GuiLoadingClient()
+        mc.displayGuiScreen(gui)
 
+        ClientUtils.logInfo("Loading $name v$version")
+        ClientUtils.setTitle("Loading Client...")
+
+        fileManager = FileManager()
+
+        ultraLightManager = UltraLightManager()
+
+        gui.displayString="config"
         configManager = ConfigManager()
         eventManager.registerListener(configManager)
 
+        gui.displayString="command"
         commandManager = CommandManager()
 
+        gui.displayString="module"
         moduleManager = ModuleManager()
         eventManager.registerListener(moduleManager)
 
+        gui.displayString="font"
         fontManager = FontManager()
         fontManager.loadFonts()
 
+        gui.displayString="renderer"
+        ClientUtils.disableFastRender()
+
+        gui.displayString="other things"
         altManager = AltManager()
 
         configManager.loadDefault()
 
-        ClientUtils.disableFastRender()
+        ClientUtils.setTitle(null)
+
+        gui.ok=true
     }
 
     fun shutdown(){

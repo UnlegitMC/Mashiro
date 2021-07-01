@@ -2,8 +2,8 @@ package me.liuli.mashiro.module
 
 import me.liuli.mashiro.event.Listener
 import me.liuli.mashiro.module.value.Value
-import me.liuli.mashiro.util.ClientUtils
 import me.liuli.mashiro.util.MinecraftInstance
+import me.liuli.mashiro.util.client.ClientUtils
 import org.lwjgl.input.Keyboard
 
 open class Module(val name: String, val description: String, val category: ModuleCategory, val command: Boolean = true,

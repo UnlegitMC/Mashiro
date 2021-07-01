@@ -6,8 +6,8 @@ import com.google.gson.JsonParser
 import me.liuli.mashiro.event.EventMethod
 import me.liuli.mashiro.event.Listener
 import me.liuli.mashiro.event.UpdateEvent
-import me.liuli.mashiro.util.ClientUtils
 import me.liuli.mashiro.util.MinecraftInstance
+import me.liuli.mashiro.util.client.ClientUtils
 import me.liuli.mashiro.util.timing.TheTimer
 import org.reflections.Reflections
 import java.io.*

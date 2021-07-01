@@ -7,7 +7,6 @@ import org.lwjgl.opengl.GL11
 import java.awt.Color
 import java.io.File
 import java.util.*
-import kotlin.collections.HashMap
 
 class AltManager : MinecraftInstance() {
     private val skins=HashMap<UUID,AltSkin>()

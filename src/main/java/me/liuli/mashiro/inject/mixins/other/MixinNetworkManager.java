@@ -3,7 +3,7 @@ package me.liuli.mashiro.inject.mixins.other;
 import io.netty.channel.ChannelHandlerContext;
 import me.liuli.mashiro.Mashiro;
 import me.liuli.mashiro.event.PacketEvent;
-import me.liuli.mashiro.util.PacketUtils;
+import me.liuli.mashiro.util.file.PacketUtils;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import org.spongepowered.asm.mixin.Mixin;

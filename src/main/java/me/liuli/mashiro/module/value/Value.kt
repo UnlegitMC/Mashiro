@@ -1,7 +1,7 @@
 package me.liuli.mashiro.module.value
 
 import com.google.gson.JsonElement
-import me.liuli.mashiro.util.ClientUtils
+import me.liuli.mashiro.util.client.ClientUtils
 
 abstract class Value<T>(val name: String, protected var value: T) {
     val defaultValue=value

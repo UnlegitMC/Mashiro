@@ -1,7 +1,7 @@
 package me.liuli.mashiro.command.commands
 
 import me.liuli.mashiro.command.Command
-import me.liuli.mashiro.util.StringUtils
+import me.liuli.mashiro.util.other.StringUtils
 
 class SayCommand : Command("say", "Allows you to say something without change the prefix") {
     override fun exec(args: Array<String>) {

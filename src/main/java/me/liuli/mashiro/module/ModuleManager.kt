@@ -4,7 +4,7 @@ import me.liuli.mashiro.Mashiro
 import me.liuli.mashiro.event.EventMethod
 import me.liuli.mashiro.event.KeyEvent
 import me.liuli.mashiro.event.Listener
-import me.liuli.mashiro.util.ClientUtils
+import me.liuli.mashiro.util.client.ClientUtils
 import org.lwjgl.input.Keyboard
 import org.reflections.Reflections
 

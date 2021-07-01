@@ -1,6 +1,6 @@
 package me.liuli.mashiro.command
 
-import me.liuli.mashiro.util.ClientUtils
+import me.liuli.mashiro.util.client.ClientUtils
 import org.reflections.Reflections
 
 class CommandManager {

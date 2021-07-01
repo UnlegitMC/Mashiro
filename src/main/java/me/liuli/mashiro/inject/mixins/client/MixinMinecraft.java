@@ -5,6 +5,8 @@ import me.liuli.mashiro.event.ClickBlockEvent;
 import me.liuli.mashiro.event.KeyEvent;
 import me.liuli.mashiro.event.ScreenEvent;
 import me.liuli.mashiro.event.WorldEvent;
+import me.liuli.mashiro.gui.client.GuiLoadingClient;
+import me.liuli.mashiro.util.client.ClientUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -15,7 +17,6 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
-public class MixinMinecraft {
+public abstract class MixinMinecraft {
     @Shadow
     public GuiScreen currentScreen;
 
@@ -46,9 +47,12 @@ public class MixinMinecraft {
     @Shadow
     public PlayerControllerMP playerController;
 
+    @Shadow
+    public abstract void displayGuiScreen(GuiScreen guiScreenIn);
+
     @Inject(method = "createDisplay", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/Display;setTitle(Ljava/lang/String;)V", shift = At.Shift.AFTER))
     private void createDisplay(CallbackInfo callbackInfo) {
-        Display.setTitle(Mashiro.getName()+" v"+Mashiro.getVersion()+" by "+Mashiro.getAuthor());
+        ClientUtils.INSTANCE.setTitle("Loading Minecraft...");
     }
 
     @Inject(method = "run", at = @At("HEAD"))
@@ -56,9 +60,16 @@ public class MixinMinecraft {
         Mashiro.INSTANCE.init();
     }
 
-    @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;checkGLError(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.AFTER))
+    @Inject(method = "startGame", at = @At("RETURN"))
     private void startGame(CallbackInfo callbackInfo) {
-        Mashiro.INSTANCE.load();
+        new Thread(() -> {
+            try{
+                Mashiro.INSTANCE.load();
+            }catch (Throwable t){
+                t.printStackTrace();
+                displayGuiScreen(new GuiLoadingClient(t));
+            }
+        }).start();
     }
 
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;dispatchKeypresses()V", shift = At.Shift.AFTER))

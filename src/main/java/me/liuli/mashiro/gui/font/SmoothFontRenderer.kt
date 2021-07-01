@@ -1,10 +1,9 @@
 package me.liuli.mashiro.gui.font
 
 import me.liuli.mashiro.Mashiro
-import me.liuli.mashiro.util.ClientUtils
 import me.liuli.mashiro.util.MinecraftInstance
+import me.liuli.mashiro.util.client.ClientUtils
 import me.liuli.mashiro.util.render.RenderUtils
-import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.texture.DynamicTexture
@@ -245,13 +244,16 @@ class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boole
      * @param char 对应的字符
      * @param bufImg 渲染出的字符图片
      */
-    class FontChar(val char: Char, val bufImg: BufferedImage){
+    class FontChar(val char: Char, val bufImg: BufferedImage) : MinecraftInstance() {
         val resourceLoc = ResourceLocation("mashiro/font/char-${char.toInt()}")
         val width=bufImg.width
         val height=bufImg.height
 
         init {
-            Minecraft.getMinecraft().textureManager.loadTexture(resourceLoc, DynamicTexture(bufImg))
+            // this need to run on minecraft main thread
+            mc.addScheduledTask {
+                mc.textureManager.loadTexture(resourceLoc, DynamicTexture(bufImg))
+            }
         }
     }
 }

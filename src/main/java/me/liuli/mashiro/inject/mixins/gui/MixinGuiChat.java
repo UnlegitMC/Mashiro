@@ -25,7 +25,9 @@ public abstract class MixinGuiChat {
     @Shadow
     public abstract void onAutocompleteResponse(String[] p_onAutocompleteResponse_1_);
 
-    // only trust message in KeyTyped to anti some client click check
+    /**
+     * only trust message in KeyTyped to anti some client click check (like old zqat.top)
+      */
     @Inject(method = "keyTyped", at = @At("HEAD"), cancellable = true)
     private void keyTyped(char typedChar, int keyCode, CallbackInfo callbackInfo) {
         String text=inputField.getText();
@@ -41,7 +43,9 @@ public abstract class MixinGuiChat {
         }
     }
 
-    // bypass click command auth
+    /**
+     * bypass click command auth like kjy.pub
+      */
     @Inject(method = "setText", at = @At("HEAD"), cancellable = true)
     private void setText(String newChatText, boolean shouldOverwrite, CallbackInfo callbackInfo) {
         if(shouldOverwrite&&newChatText.startsWith(Mashiro.commandManager.getPrefix())){

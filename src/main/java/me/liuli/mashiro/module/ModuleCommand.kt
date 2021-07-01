@@ -2,7 +2,7 @@ package me.liuli.mashiro.module
 
 import me.liuli.mashiro.command.Command
 import me.liuli.mashiro.module.value.*
-import me.liuli.mashiro.util.StringUtils
+import me.liuli.mashiro.util.other.StringUtils
 import me.liuli.mashiro.util.world.BlockUtils
 import net.minecraft.block.Block
 

@@ -14,6 +14,6 @@ public class MixinGuiMainMenu extends MixinGuiScreen {
         // render client brand
         this.fontRendererObj.drawString(Mashiro.getColoredName()+" v"+Mashiro.getVersion(), 2, this.height - (10 + 4 * (this.fontRendererObj.FONT_HEIGHT + 1)), 16777215, false);
 
-        Mashiro.altManager.drawNowAltOnMenu();
+//        Mashiro.altManager.drawNowAltOnMenu();
     }
 }
