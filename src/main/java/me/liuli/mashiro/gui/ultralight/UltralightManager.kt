@@ -11,12 +11,15 @@ import me.liuli.mashiro.Mashiro
 import me.liuli.mashiro.gui.client.GuiLoadingClient
 import me.liuli.mashiro.gui.ultralight.adaptor.ClipBoardAdaptor
 import me.liuli.mashiro.gui.ultralight.adaptor.MCEventAdaptor
+import me.liuli.mashiro.gui.ultralight.page.CPUViewRenderer
+import me.liuli.mashiro.gui.ultralight.page.ScreenView
 import me.liuli.mashiro.gui.ultralight.page.View
 import me.liuli.mashiro.util.MinecraftInstance
 import me.liuli.mashiro.util.client.ClientUtils
 import me.liuli.mashiro.util.exception.PCUnsupportedException
 import me.liuli.mashiro.util.file.FileUtils
 import me.liuli.mashiro.util.file.NetUtils
+import net.minecraft.client.gui.GuiScreen
 import org.apache.logging.log4j.LogManager
 import java.io.File
 import java.net.URL
@@ -30,7 +33,7 @@ class UltralightManager : MinecraftInstance() {
 
     val platform: UltralightPlatform
     val renderer: UltralightRenderer
-    private val eventAdaptor: MCEventAdaptor
+    val eventAdaptor: MCEventAdaptor
 
     val views=mutableListOf<View>()
 
@@ -97,8 +100,15 @@ class UltralightManager : MinecraftInstance() {
 
         renderer=UltralightRenderer.create()
 
-        eventAdaptor=MCEventAdaptor()
+        eventAdaptor=MCEventAdaptor(this)
         Mashiro.eventManager.registerListener(eventAdaptor)
+    }
+
+    fun getActiveView() = views.find { it is ScreenView && mc.currentScreen == it.screen }
+
+    fun update() {
+        views.forEach(View::update)
+        renderer.update()
     }
 
     fun render(layer: RenderLayer) {
@@ -107,8 +117,28 @@ class UltralightManager : MinecraftInstance() {
         views.filter { it.layer == layer }
             .forEach(View::render)
     }
+
+    fun resize(width: Long, height: Long) {
+        views.forEach { it.resize(width, height) }
+    }
+
+    fun newOverlayView() = View(RenderLayer.OVERLAY_LAYER, newViewRenderer()).also { views += it }
+
+    fun newScreenView(screen: GuiScreen, adaptedScreen: GuiScreen? = null, parentScreen: GuiScreen? = null) =
+        ScreenView(newViewRenderer(), screen, adaptedScreen, parentScreen).also { views += it }
+
+    fun removeView(view: View) {
+        view.free()
+        views.remove(view)
+    }
+
+    fun addView(view: View){
+        views.add(view)
+    }
+
+    private fun newViewRenderer() = CPUViewRenderer()
 }
 
 enum class RenderLayer {
-    OVERLAY_LAYER, SCREEN_LAYER, SPLASH_LAYER
+    OVERLAY_LAYER, SCREEN_LAYER
 }

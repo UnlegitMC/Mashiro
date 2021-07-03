@@ -5,7 +5,6 @@ import java.io.File
 import java.nio.file.StandardWatchEventKinds
 
 class Page(val name: String) {
-
     private val pageFolder = File(Mashiro.ultralightManager.dataDir, name)
     private val htmlFile = File(pageFolder, "index.html")
 

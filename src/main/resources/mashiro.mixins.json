@@ -12,9 +12,9 @@
     "entity.MixinPlayerControllerMP",
     "gui.MixinGuiChat",
     "gui.MixinGuiInGame",
-    "gui.MixinGuiSpectator",
     "gui.MixinGuiMainMenu",
     "gui.MixinGuiScreen",
+    "gui.MixinGuiSpectator",
     "other.MixinNetworkManager",
     "render.MixinEntityRenderer",
     "render.MixinFontRenderer"

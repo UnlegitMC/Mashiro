@@ -36,6 +36,8 @@ class SlowDownEvent(var strafe: Float, var forward: Float) : Event()
 
 class KeyEvent(val key: Int) : Event()
 
+class GuiKeyEvent(val typedChar: Char, val key: Int) : Event()
+
 class TextEvent(var text: String) : Event()
 
 class ClickBlockEvent(val clickedBlock: BlockPos?, val enumFacing: EnumFacing?) : Event()
@@ -52,6 +54,8 @@ class PacketEvent(val packet: Packet<*>, val type: Type) : EventCancellable() {
 }
 
 class Render2DEvent(val partialTicks: Float) : Event()
+
+class RenderScreenEvent(val mouseX: Int, val mouseY: Int, val partialTicks: Float) : Event()
 
 class Render3DEvent(val partialTicks: Float) : Event()
 

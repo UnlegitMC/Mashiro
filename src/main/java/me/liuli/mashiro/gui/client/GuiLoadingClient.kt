@@ -7,6 +7,7 @@ import me.liuli.mashiro.util.render.RenderUtils
 import net.minecraft.client.gui.GuiMainMenu
 import net.minecraft.client.gui.GuiScreen
 import java.awt.Color
+import java.lang.RuntimeException
 
 class GuiLoadingClient(val err: Throwable? = null) : GuiScreen() {
     var displayString=""

@@ -1,4 +1,4 @@
-package me.liuli.mashiro.module.modules.render
+package me.liuli.mashiro.module.modules.client
 
 import me.liuli.mashiro.Mashiro
 import me.liuli.mashiro.event.EventMethod
@@ -12,7 +12,7 @@ import net.minecraft.client.gui.ScaledResolution
 import org.lwjgl.opengl.GL11
 import java.awt.Color
 
-class HUD : Module("HUD","Display hud of the client", ModuleCategory.RENDER, defaultOn = true) {
+class HUD : Module("HUD","Display hud of the client", ModuleCategory.CLIENT, defaultOn = true) {
     private var lastUpdate = System.currentTimeMillis()
 
     @EventMethod

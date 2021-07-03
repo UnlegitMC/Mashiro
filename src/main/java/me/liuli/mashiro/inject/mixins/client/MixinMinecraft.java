@@ -50,7 +50,7 @@ public abstract class MixinMinecraft {
     @Shadow
     public abstract void displayGuiScreen(GuiScreen guiScreenIn);
 
-    @Inject(method = "createDisplay", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/Display;setTitle(Ljava/lang/String;)V", shift = At.Shift.AFTER))
+    @Inject(method = "createDisplay", at = @At(value = "INVOKE"))
     private void createDisplay(CallbackInfo callbackInfo) {
         ClientUtils.INSTANCE.setTitle("Loading Minecraft...");
     }
@@ -70,6 +70,12 @@ public abstract class MixinMinecraft {
                 displayGuiScreen(new GuiLoadingClient(t));
             }
         }).start();
+    }
+
+    @Inject(method = "resize", at = @At("RETURN"))
+    public void resize(int width, int height, CallbackInfo callbackInfo) {
+        if(Mashiro.ultralightManager!=null)
+            Mashiro.ultralightManager.getEventAdaptor().onResize(width, height);
     }
 
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;dispatchKeypresses()V", shift = At.Shift.AFTER))
@@ -106,7 +112,6 @@ public abstract class MixinMinecraft {
 
                 if(this.leftClickCounter == 0)
                     Mashiro.eventManager.callEvent(new ClickBlockEvent(blockPos, this.objectMouseOver.sideHit));
-
 
                 if(this.theWorld.getBlockState(blockPos).getBlock().getMaterial() != Material.air && this.playerController.onPlayerDamageBlock(blockPos, this.objectMouseOver.sideHit)) {
                     this.effectRenderer.addBlockHitEffects(blockPos, this.objectMouseOver.sideHit);
