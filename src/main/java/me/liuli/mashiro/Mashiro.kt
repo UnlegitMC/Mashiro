@@ -8,10 +8,9 @@ import me.liuli.mashiro.gui.alt.AltManager
 import me.liuli.mashiro.gui.client.GuiLoadingClient
 import me.liuli.mashiro.gui.font.FontManager
 import me.liuli.mashiro.module.ModuleManager
-import me.liuli.mashiro.ultralight.UltraLightManager
+import me.liuli.mashiro.gui.ultralight.UltralightManager
 import me.liuli.mashiro.util.MinecraftInstance
 import me.liuli.mashiro.util.client.ClientUtils
-import net.minecraft.client.gui.GuiMainMenu
 
 object Mashiro : MinecraftInstance() {
     @JvmStatic
@@ -30,7 +29,7 @@ object Mashiro : MinecraftInstance() {
     lateinit var fontManager: FontManager
     lateinit var altManager: AltManager
     lateinit var fileManager: FileManager
-    lateinit var ultraLightManager: UltraLightManager
+    lateinit var ultralightManager: UltralightManager
 
     fun init(){
         ClientUtils.logInfo("Initialize $name v$version")
@@ -46,7 +45,7 @@ object Mashiro : MinecraftInstance() {
 
         fileManager = FileManager()
 
-        ultraLightManager = UltraLightManager()
+        ultralightManager = UltralightManager()
 
         gui.displayString="config"
         configManager = ConfigManager()

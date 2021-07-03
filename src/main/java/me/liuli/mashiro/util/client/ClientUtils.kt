@@ -2,9 +2,6 @@ package me.liuli.mashiro.util.client
 
 import com.google.gson.JsonObject
 import me.liuli.mashiro.Mashiro
-import me.liuli.mashiro.Mashiro.author
-import me.liuli.mashiro.Mashiro.name
-import me.liuli.mashiro.Mashiro.version
 import me.liuli.mashiro.util.MinecraftInstance
 import net.minecraft.client.settings.GameSettings
 import net.minecraft.util.IChatComponent
@@ -13,7 +10,7 @@ import org.lwjgl.opengl.Display
 import java.lang.reflect.Field
 
 object ClientUtils : MinecraftInstance() {
-    private val logger = LogManager.getLogger(Mashiro.name)
+    val logger = LogManager.getLogger(Mashiro.name)
 
     private var fastRenderField: Field? = null
 
@@ -59,7 +56,7 @@ object ClientUtils : MinecraftInstance() {
     }
 
     fun setTitle(status: String? = null){
-        Display.setTitle("$name v$version by $author"+
+        Display.setTitle("${Mashiro.name} v${Mashiro.version} by ${Mashiro.author}"+
                 if(status!=null&&status.isNotEmpty()){" | $status"}else{""})
     }
 
