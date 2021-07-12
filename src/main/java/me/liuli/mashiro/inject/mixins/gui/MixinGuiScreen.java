@@ -34,10 +34,4 @@ public class MixinGuiScreen {
     private void keyTyped(char typedChar, int keyCode, CallbackInfo callbackInfo) {
         Mashiro.eventManager.callEvent(new GuiKeyEvent(typedChar, keyCode));
     }
-
-//    @Inject(method = "mouseClicked", at = @At("RETURN"))
-//    private void mouseClicked(int mouseX, int mouseY, int mouseButton, CallbackInfo callbackInfo) {
-//        if(Mashiro.ultralightManager!=null)
-//            Mashiro.ultralightManager.getEventAdaptor().onMouseClick(mouseX, mouseY, mouseButton);
-//    }
 }

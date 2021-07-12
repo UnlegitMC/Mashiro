@@ -8,7 +8,6 @@ import me.liuli.mashiro.gui.alt.AltManager
 import me.liuli.mashiro.gui.client.GuiLoadingClient
 import me.liuli.mashiro.gui.font.FontManager
 import me.liuli.mashiro.module.ModuleManager
-import me.liuli.mashiro.gui.ultralight.UltralightManager
 import me.liuli.mashiro.util.MinecraftInstance
 import me.liuli.mashiro.util.client.ClientUtils
 
@@ -29,7 +28,6 @@ object Mashiro : MinecraftInstance() {
     lateinit var fontManager: FontManager
     lateinit var altManager: AltManager
     lateinit var fileManager: FileManager
-    lateinit var ultralightManager: UltralightManager
 
     fun init(){
         ClientUtils.logInfo("Initialize $name v$version")
@@ -44,8 +42,6 @@ object Mashiro : MinecraftInstance() {
         ClientUtils.setTitle("Loading Client...")
 
         fileManager = FileManager()
-
-        ultralightManager = UltralightManager()
 
         gui.displayString="config"
         configManager = ConfigManager()

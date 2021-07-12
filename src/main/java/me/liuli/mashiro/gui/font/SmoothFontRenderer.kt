@@ -23,13 +23,16 @@ import javax.imageio.ImageIO
  * @param doNormalInit 预渲染英文字符，如果是图标字体填false
  * @param defaultHeight 默认字体高度
  * @param enableCache 使用字体缓存
+ * @param folderName 覆写字体缓存文件夹名称
  */
 class SmoothFontRenderer(private val font: Font, private val doNormalInit: Boolean = true,
-                         val defaultHeight: Float = mc.fontRendererObj.FONT_HEIGHT.toFloat(), val enableCache: Boolean = true) : MinecraftInstance() {
+                         val defaultHeight: Float = mc.fontRendererObj.FONT_HEIGHT.toFloat(), val enableCache: Boolean = true,
+                         val folderName: String = font.fontName.toLowerCase().replace(" ","_")) : MinecraftInstance() {
+
     private lateinit var fontMetrics: FontMetrics
 
     private val chars=HashMap<Char, FontChar>()
-    private val cacheDir=File(Mashiro.fontManager.fontCacheDir,"${font.fontName.toLowerCase().replace(" ","_")}-${font.size}")
+    private val cacheDir=File(Mashiro.fontManager.fontCacheDir,"$folderName-${font.size}")
 
     init {
         val loadTime=System.currentTimeMillis()

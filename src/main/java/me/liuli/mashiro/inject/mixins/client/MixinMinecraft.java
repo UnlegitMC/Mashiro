@@ -72,12 +72,6 @@ public abstract class MixinMinecraft {
         }).start();
     }
 
-    @Inject(method = "resize", at = @At("RETURN"))
-    public void resize(int width, int height, CallbackInfo callbackInfo) {
-        if(Mashiro.ultralightManager!=null)
-            Mashiro.ultralightManager.getEventAdaptor().onResize(width, height);
-    }
-
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;dispatchKeypresses()V", shift = At.Shift.AFTER))
     private void onKey(CallbackInfo callbackInfo) {
         if(Keyboard.getEventKeyState() && currentScreen == null)

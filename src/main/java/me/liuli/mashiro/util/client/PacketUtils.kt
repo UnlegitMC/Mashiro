@@ -1,4 +1,4 @@
-package me.liuli.mashiro.util.file
+package me.liuli.mashiro.util.client
 
 import me.liuli.mashiro.util.MinecraftInstance
 import net.minecraft.network.Packet
