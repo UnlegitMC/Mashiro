@@ -9,13 +9,21 @@ import me.liuli.mashiro.util.move.MovementUtils
 import net.minecraft.potion.Potion
 
 class Sprint : Module("Sprint","Automatically make you sprint", ModuleCategory.MOVEMENT) {
-    private val allDirectionValue=BoolValue("AllDirections",false)
-
+    //private val allDirectionValue=BoolValue("AllDirections",false);
+    private val legitMode=BoolValue("LegitMode",true);
+    
     @EventMethod
     fun onUpdate(event: UpdateEvent){
-        if(MovementUtils.isMoving()&&!mc.thePlayer.isPotionActive(Potion.blindness)&&(mc.thePlayer.foodStats.foodLevel > 6.0f || mc.thePlayer.capabilities.allowFlying)){
-            if(mc.gameSettings.keyBindForward.isPressed||allDirectionValue.get())
-                mc.thePlayer.isSprinting=true
+        
+        if(legitMode.get()){
+            if(!mc.thePlayer.isPotionActive(Potion.blindness) && mc.thePlayer.foodStats.foodLevel > 6.0f && !mc.thePlayer.isSneaking()){
+                if(mc.thePlayer.movementInput.moveForward==1.0){// It is FLOAT? Replace to 1.0f
+                    mc.thePlayer.isSprinting=true;
+                }
+            }
+        }else{
+            mc.thePlayer.isSprinting=true;
         }
+        
     }
 }
