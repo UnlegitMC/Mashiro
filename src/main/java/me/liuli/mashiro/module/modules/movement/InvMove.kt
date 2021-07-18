@@ -4,7 +4,7 @@ import me.liuli.mashiro.event.EventMethod
 import me.liuli.mashiro.event.UpdateEvent
 import me.liuli.mashiro.module.Module
 import me.liuli.mashiro.module.ModuleCategory
-import me.liuli.mashiro.module.value.BoolValue
+
 import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.gui.GuiIngameMenu
 import net.minecraft.client.gui.inventory.GuiContainer
