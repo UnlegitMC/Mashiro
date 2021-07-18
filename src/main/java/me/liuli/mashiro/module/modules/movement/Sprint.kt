@@ -7,6 +7,7 @@ import me.liuli.mashiro.module.ModuleCategory
 import me.liuli.mashiro.module.value.BoolValue
 import net.minecraft.potion.Potion
 
+//Not compiled, built by BRAIN-DEVELOPMENT-KIT XD
 class Sprint : Module("Sprint","Automatically make you sprint", ModuleCategory.MOVEMENT) {
     //private val allDirectionValue=BoolValue("AllDirections",false);
     private val legitMode=BoolValue("LegitMode",true);
