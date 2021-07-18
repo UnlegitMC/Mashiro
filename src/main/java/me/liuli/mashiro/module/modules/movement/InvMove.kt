@@ -5,11 +5,15 @@ import me.liuli.mashiro.event.UpdateEvent
 import me.liuli.mashiro.module.Module
 import me.liuli.mashiro.module.ModuleCategory
 
-import net.minecraft.client.gui.GuiChat
-import net.minecraft.client.gui.GuiIngameMenu
-import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.client.settings.GameSettings
+import net.minecraft.client.gui.inventory.GuiContainer
+import net.minecraft.client.gui.GuiIngameMenu
+import net.minecraft.client.gui.GuiChat
 
+
+
+
+//Not compiled, built by BRAIN-DEVELOPMENT-KIT XD
 class InvMove : Module("InvMove","Allows you to walk while opening the inventory.", ModuleCategory.MOVEMENT) {
     
     @EventMethod;
