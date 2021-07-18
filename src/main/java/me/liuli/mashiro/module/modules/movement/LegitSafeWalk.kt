@@ -7,10 +7,8 @@ import me.liuli.mashiro.module.ModuleCategory
 
 import net.minecraft.util.BlockPos
 import net.minecraft.init.Blocks
-import net.minecraft.client.settings.GameSettings
 
-
-
+//Not compiled, built by BRAIN-DEVELOPMENT-KIT XD
 class LegitSafeWalk : Module("LegitSafeWalk","Automatically make you walk safely", ModuleCategory.MOVEMENT) {
     
     @EventMethod
