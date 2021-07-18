@@ -6,6 +6,7 @@ import me.liuli.mashiro.module.Module
 import me.liuli.mashiro.module.ModuleCategory
 import net.minecraft.potion.Potion
 
+//Not compiled, built by BRAIN-DEVELOPMENT-KIT XD
 class LegitSpeed : Module("LegitSpeed","Automatically make you fast", ModuleCategory.MOVEMENT) {
     
     @EventMethod
