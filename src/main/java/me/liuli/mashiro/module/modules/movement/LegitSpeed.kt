@@ -4,8 +4,6 @@ import me.liuli.mashiro.event.EventMethod
 import me.liuli.mashiro.event.UpdateEvent
 import me.liuli.mashiro.module.Module
 import me.liuli.mashiro.module.ModuleCategory
-import me.liuli.mashiro.module.value.BoolValue
-import me.liuli.mashiro.util.move.MovementUtils
 import net.minecraft.potion.Potion
 
 class LegitSpeed : Module("LegitSpeed","Automatically make you fast", ModuleCategory.MOVEMENT) {
