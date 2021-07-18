@@ -13,7 +13,7 @@ class LegitSpeed : Module("LegitSpeed","Automatically make you fast", ModuleCate
     fun onUpdate(event: UpdateEvent){
         // Force sprint
         if(!mc.thePlayer.isPotionActive(Potion.blindness) && mc.thePlayer.foodStats.foodLevel > 6.0f && !mc.thePlayer.isSneaking()){
-            if(mc.thePlayer.movementInput.moveForward==1.0){// It is FLOAT? Replace to 1.0f
+            if(mc.thePlayer.movementInput.moveForward==1.0f){
                 mc.thePlayer.isSprinting=true;
             }
         }
