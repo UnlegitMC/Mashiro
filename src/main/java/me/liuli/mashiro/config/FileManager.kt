@@ -3,12 +3,7 @@ package me.liuli.mashiro.config
 import com.google.gson.JsonParser
 import me.liuli.mashiro.gui.client.GuiLoadingClient
 import me.liuli.mashiro.util.MinecraftInstance
-import me.liuli.mashiro.util.client.ClientUtils
-import me.liuli.mashiro.util.exception.PCUnsupportedException
-import me.liuli.mashiro.util.file.FileUtils
-import me.liuli.mashiro.util.file.NetUtils
 import net.minecraft.util.HttpUtil
-import java.io.File
 import java.net.URL
 
 class FileManager() : MinecraftInstance() {
@@ -20,18 +15,19 @@ class FileManager() : MinecraftInstance() {
     val fileStorageServer: String
 
     init {
-        if(mc.currentScreen is GuiLoadingClient)
-            (mc.currentScreen as GuiLoadingClient).displayString="files"
+        if (mc.currentScreen is GuiLoadingClient) {
+            (mc.currentScreen as GuiLoadingClient).displayString = "files"
+        }
 
-        isChinese=try {
+        isChinese = try {
             JsonParser().parse(HttpUtil.get(URL("http://ip-api.com/json?fields=countryCode"))).asJsonObject.get("countryCode").asString.equals("CN")
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             false
         }
-        fileStorageServer = if(isChinese){
+        fileStorageServer = if (isChinese) {
             "https://hub.fastgit.org/Project-EZ4H/MashiroFiles/raw/master"
-        }else{
+        } else {
             "https://github.com/Project-EZ4H/MashiroFiles/raw/master"
         }
     }

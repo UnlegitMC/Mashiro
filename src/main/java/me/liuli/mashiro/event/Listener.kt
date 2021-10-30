@@ -1,5 +1,5 @@
 package me.liuli.mashiro.event
 
 interface Listener {
-    fun listen():Boolean
+    fun listen(): Boolean
 }

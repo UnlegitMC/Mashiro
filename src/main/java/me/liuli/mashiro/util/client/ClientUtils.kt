@@ -14,21 +14,22 @@ object ClientUtils : MinecraftInstance() {
 
     private var fastRenderField: Field? = null
 
-    init{
+    init {
         try {
             fastRenderField = GameSettings::class.java.getDeclaredField("ofFastRender")
 
-            if (!fastRenderField!!.isAccessible)
+            if (!fastRenderField!!.isAccessible) {
                 fastRenderField!!.isAccessible = true
+            }
         } catch (ignored: NoSuchFieldException) {
         }
     }
 
-    fun logInfo(msg: String){
+    fun logInfo(msg: String) {
         logger.info(msg)
     }
 
-    fun logWarn(msg: String){
+    fun logWarn(msg: String) {
         logger.warn(msg)
     }
 
@@ -55,26 +56,26 @@ object ClientUtils : MinecraftInstance() {
         mc.thePlayer.addChatMessage(IChatComponent.Serializer.jsonToComponent(jsonObject.toString()))
     }
 
-    fun setTitle(status: String? = null){
-        Display.setTitle("${Mashiro.name} v${Mashiro.version} by ${Mashiro.author}"+
-                if(status!=null&&status.isNotEmpty()){" | $status"}else{""})
+    fun setTitle(status: String? = null) {
+        Display.setTitle("${Mashiro.name} v${Mashiro.version} by ${Mashiro.author}" +
+                if (status != null && status.isNotEmpty()) { " | $status" } else { "" })
     }
 
-    fun getSystemType():EnumSystemType{
-        val os=System.getProperty("os.name")
+    fun getSystemType(): EnumSystemType {
+        val os = System.getProperty("os.name")
 
-        return when{
-            os.contains("win",true) -> EnumSystemType.WINDOWS
-            os.contains("mac",true) || os.contains("darwin",true) -> EnumSystemType.MACOSX
-            os.contains("nux",true) || os.contains("nix",true) || os.contains("aix",true) -> EnumSystemType.LINUX
+        return when {
+            os.contains("win", true) -> EnumSystemType.WINDOWS
+            os.contains("mac", true) || os.contains("darwin", true) -> EnumSystemType.MACOSX
+            os.contains("nux", true) || os.contains("nix", true) || os.contains("aix", true) -> EnumSystemType.LINUX
             else -> EnumSystemType.UNKNOWN
         }
     }
 
-    enum class EnumSystemType(val friendlyName: String, val resourceName: String){
-        WINDOWS("Windows","win"),
-        MACOSX("MacOSX","mac"),
-        LINUX("Linux","linux"),
-        UNKNOWN("Unknown","unknown")
+    enum class EnumSystemType(val friendlyName: String, val resourceName: String) {
+        WINDOWS("Windows", "win"),
+        MACOSX("MacOSX", "mac"),
+        LINUX("Linux", "linux"),
+        UNKNOWN("Unknown", "unknown")
     }
 }

@@ -15,7 +15,8 @@ open class IntValue(name: String, value: Int, val minimum: Int = 0, val maximum:
     override fun toJson() = JsonPrimitive(value)
 
     override fun fromJson(element: JsonElement) {
-        if (element.isJsonPrimitive)
+        if (element.isJsonPrimitive) {
             value = element.asInt
+        }
     }
 }

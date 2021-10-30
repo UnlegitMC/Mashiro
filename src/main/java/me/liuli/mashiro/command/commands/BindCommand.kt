@@ -4,7 +4,7 @@ import me.liuli.mashiro.Mashiro
 import me.liuli.mashiro.command.Command
 import org.lwjgl.input.Keyboard
 
-class BindCommand : Command("bind","Manage your module binds", arrayOf("b")) {
+class BindCommand : Command("bind", "Manage your module binds", arrayOf("b")) {
     override fun exec(args: Array<String>) {
         if (args.isNotEmpty()) {
             // Get module by name
@@ -15,14 +15,14 @@ class BindCommand : Command("bind","Manage your module binds", arrayOf("b")) {
                 return
             }
 
-            if(args.size>1){
+            if (args.size> 1) {
                 // Find key by name and change
-                val key = Keyboard.getKeyIndex(args[1].toUpperCase())
+                val key = Keyboard.getKeyIndex(args[1].uppercase())
                 module.keyBind = key
 
                 // Response to user
                 chat("Bound module §l${module.name}§r to key §l${Keyboard.getKeyName(key)}§r.")
-            }else{
+            } else {
                 Mashiro.moduleManager.pendKeyBind(module)
             }
 

@@ -1,17 +1,17 @@
 package me.liuli.mashiro.util.timing
 
 class TheTimer {
-    private var time=System.currentTimeMillis()
+    private var time = System.currentTimeMillis()
 
-    fun reset(){
-        time=System.currentTimeMillis()
+    fun reset() {
+        time = System.currentTimeMillis()
     }
 
-    fun getTimePassed():Long{
-        return System.currentTimeMillis()-time
+    fun getTimePassed(): Long {
+        return System.currentTimeMillis() - time
     }
 
-    fun hasTimePassed(time: Long):Boolean{
-        return getTimePassed()>=time
+    fun hasTimePassed(time: Long): Boolean {
+        return getTimePassed() >= time
     }
 }

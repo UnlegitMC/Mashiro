@@ -4,10 +4,10 @@ import me.liuli.mashiro.util.client.ClientUtils
 import org.reflections.Reflections
 
 class CommandManager {
-    val defaultPrefix="."
+    val defaultPrefix = "."
 
-    var prefix=defaultPrefix
-    val commands=HashMap<String,Command>()
+    var prefix = defaultPrefix
+    val commands = HashMap<String, Command>()
     var latestAutoComplete: Array<String> = emptyArray()
 
     init {
@@ -22,29 +22,29 @@ class CommandManager {
         }
     }
 
-    fun registerCommand(command: Command){
-        commands[command.command.toLowerCase()] = command
+    fun registerCommand(command: Command) {
+        commands[command.command.lowercase()] = command
         command.subCommand.forEach {
-            commands[it.toLowerCase()] = command
+            commands[it.lowercase()] = command
         }
     }
 
     fun getCommand(name: String): Command? {
-        return commands[name.toLowerCase()]
+        return commands[name.lowercase()]
     }
 
-    fun handleCommand(msg: String){
-        val input=if(msg.startsWith(prefix)){ msg.substring(1) }else{ msg }
+    fun handleCommand(msg: String) {
+        val input = if (msg.startsWith(prefix)) { msg.substring(1) } else { msg }
         val args = input.split(" ").toTypedArray()
-        val command=getCommand(args[0])
-        if(command==null){
+        val command = getCommand(args[0])
+        if (command == null) {
             ClientUtils.displayAlert("Command not found. Type ${prefix}help to view all commands.")
             return
         }
 
         try {
-            command.exec(args.copyOfRange(1,args.size))
-        }catch (e: Exception){
+            command.exec(args.copyOfRange(1, args.size))
+        } catch (e: Exception) {
             e.printStackTrace()
             ClientUtils.displayAlert("An error occurred while executing the command($e)")
         }

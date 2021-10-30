@@ -6,17 +6,17 @@ import me.liuli.mashiro.config.ConfigSection
 
 class CommandSection : ConfigSection("command") {
     override fun load(json: JsonObject?) {
-        if(json==null || !json.has("prefix")){
-            Mashiro.commandManager.prefix=Mashiro.commandManager.defaultPrefix
-        }else{
-            Mashiro.commandManager.prefix=json.get("prefix").asString
+        if (json == null || !json.has("prefix")) {
+            Mashiro.commandManager.prefix = Mashiro.commandManager.defaultPrefix
+        } else {
+            Mashiro.commandManager.prefix = json.get("prefix").asString
         }
     }
 
     override fun save(): JsonObject {
-        val json=JsonObject()
+        val json = JsonObject()
 
-        json.addProperty("prefix",Mashiro.commandManager.prefix)
+        json.addProperty("prefix", Mashiro.commandManager.prefix)
 
         return json
     }

@@ -6,6 +6,9 @@
 package me.liuli.mashiro.util.render;
 
 import me.liuli.mashiro.util.MinecraftInstance;
+import me.liuli.mashiro.util.other.MathUtils;
+import me.liuli.mashiro.util.render.glu.TessCallback;
+import me.liuli.mashiro.util.render.glu.VertexData;
 import me.liuli.mashiro.util.world.BlockUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.Gui;
@@ -23,8 +26,14 @@ import net.minecraft.util.Timer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+import org.lwjgl.util.glu.GLUtessellator;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -631,7 +640,7 @@ public final class RenderUtils extends MinecraftInstance {
         GlStateManager.color(red, green, blue, alpha);
     }
 
-    private static void glColor(final int hex) {
+    public static void glColor(final int hex) {
         final float alpha = (hex >> 24 & 0xFF) / 255F;
         final float red = (hex >> 16 & 0xFF) / 255F;
         final float green = (hex >> 8 & 0xFF) / 255F;
@@ -744,6 +753,11 @@ public final class RenderUtils extends MinecraftInstance {
 
     public static void resetCaps() {
         glCapMap.forEach(RenderUtils::setGlState);
+        glCapMap.clear();
+    }
+
+    public static void clearCaps() {
+        glCapMap.clear();
     }
 
     public static void enableGlCap(final int cap) {
@@ -756,7 +770,7 @@ public final class RenderUtils extends MinecraftInstance {
     }
 
     public static void disableGlCap(final int cap) {
-        setGlCap(cap, true);
+        setGlCap(cap, false);
     }
 
     public static void disableGlCap(final int... caps) {
@@ -901,5 +915,90 @@ public final class RenderUtils extends MinecraftInstance {
         GL11.glDisable(2848);
         GL11.glShadeModel(7424);
         Gui.drawRect(0, 0, 0, 0, 0);
+    }
+
+    /**
+     * 在LWJGL中渲染AWT图形
+     * @param shape 准备渲染的图形
+     * @param epsilon 图形精细度，传0不做处理
+     */
+    public static void drawAWTShape(Shape shape, double epsilon) {
+        PathIterator path=shape.getPathIterator(new AffineTransform());
+        Double[] cp=new Double[2]; // 记录上次操作的点用于计算曲线
+
+        GLUtessellator tess = GLU.gluNewTess(); // 创建GLUtessellator用于渲染凹多边形（GL_POLYGON只能渲染凸多边形）
+
+        tess.gluTessCallback(GLU.GLU_TESS_BEGIN, TessCallback.INSTANCE);
+        tess.gluTessCallback(GLU.GLU_TESS_END, TessCallback.INSTANCE);
+        tess.gluTessCallback(GLU.GLU_TESS_VERTEX, TessCallback.INSTANCE);
+        tess.gluTessCallback(GLU.GLU_TESS_COMBINE, TessCallback.INSTANCE);
+
+        switch (path.getWindingRule()){
+            case PathIterator.WIND_EVEN_ODD:{
+                tess.gluTessProperty(GLU.GLU_TESS_WINDING_RULE, GLU.GLU_TESS_WINDING_ODD);
+                break;
+            }
+            case PathIterator.WIND_NON_ZERO:{
+                tess.gluTessProperty(GLU.GLU_TESS_WINDING_RULE, GLU.GLU_TESS_WINDING_NONZERO);
+                break;
+            }
+        }
+
+        // 缓存单个图形路径上的点用于精简以提升性能
+        ArrayList<Double[]> pointsCache = new ArrayList<>();
+
+        tess.gluTessBeginPolygon(null);
+
+        while (!path.isDone()){
+            double[] segment=new double[6];
+            int type=path.currentSegment(segment);
+            switch (type){
+                case PathIterator.SEG_MOVETO:{
+                    tess.gluTessBeginContour();
+                    pointsCache.add(new Double[] {segment[0], segment[1]});
+                    cp[0] = segment[0];
+                    cp[1] = segment[1];
+                    break;
+                }
+                case PathIterator.SEG_LINETO:{
+                    pointsCache.add(new Double[] {segment[0], segment[1]});
+                    cp[0] = segment[0];
+                    cp[1] = segment[1];
+                    break;
+                }
+                case PathIterator.SEG_QUADTO:{
+                    Double[][] points=MathUtils.getPointsOnCurve(new Double[][]{new Double[]{cp[0], cp[1]}, new Double[]{segment[0], segment[1]}, new Double[]{segment[2], segment[3]}}, 10);
+                    pointsCache.addAll(Arrays.asList(points));
+                    cp[0] = segment[2];
+                    cp[1] = segment[3];
+                    break;
+                }
+                case PathIterator.SEG_CUBICTO:{
+                    Double[][] points=MathUtils.getPointsOnCurve(new Double[][]{new Double[]{cp[0], cp[1]}, new Double[]{segment[0], segment[1]}, new Double[]{segment[2], segment[3]}, new Double[]{segment[4], segment[5]}}, 10);
+                    pointsCache.addAll(Arrays.asList(points));
+                    cp[0] = segment[4];
+                    cp[1] = segment[5];
+                    break;
+                }
+                case PathIterator.SEG_CLOSE:{
+                    // 精简路径上的点
+                    for(Double[] point : MathUtils.simplifyPoints(pointsCache.toArray(new Double[0][0]), epsilon)){
+                        tessVertex(tess, new double[] {point[0], point[1], 0.0, 0.0, 0.0, 0.0});
+                    }
+                    // 清除缓存以便画下一个图形
+                    pointsCache.clear();
+                    tess.gluTessEndContour();
+                    break;
+                }
+            }
+            path.next();
+        }
+
+        tess.gluEndPolygon();
+        tess.gluDeleteTess();
+    }
+
+    public static void tessVertex(GLUtessellator tessellator, double[] coords) {
+        tessellator.gluTessVertex(coords, 0, new VertexData(coords));
     }
 }

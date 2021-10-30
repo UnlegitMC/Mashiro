@@ -6,26 +6,35 @@ import me.liuli.mashiro.util.MinecraftInstance
 import me.liuli.mashiro.util.client.ClientUtils
 import org.lwjgl.input.Keyboard
 
-open class Module(val name: String, val description: String, val category: ModuleCategory, val command: Boolean = true,
-                  var keyBind: Int = Keyboard.CHAR_NONE, val canToggle: Boolean = true, val defaultOn: Boolean = false, var array: Boolean = true) : MinecraftInstance(),Listener {
+open class Module(
+    val name: String,
+    val description: String,
+    val category: ModuleCategory,
+    val command: Boolean = true,
+    var keyBind: Int = Keyboard.CHAR_NONE,
+    val canToggle: Boolean = true,
+    val defaultOn: Boolean = false,
+    var array: Boolean = true
+) : MinecraftInstance(), Listener {
 
-    val defaultKeyBind=keyBind
-    val defaultArray=array
+    val defaultKeyBind = keyBind
+    val defaultArray = array
 
-    var state=defaultOn
-       set(state){
+    var state = defaultOn
+       set(state) {
            if (field == state) return
 
-           if(!canToggle){
+           if (!canToggle) {
                onEnable()
                return
            }
            field = state
 
-           if(state)
+           if (state) {
                onEnable()
-           else
+           } else {
                onDisable()
+           }
        }
 
     open fun onEnable() {}
@@ -33,12 +42,12 @@ open class Module(val name: String, val description: String, val category: Modul
     open fun onDisable() {}
 
     // backend
-    var animate=0.0
+    var animate = 0.0
 
     fun chat(msg: String) = ClientUtils.displayAlert(msg)
 
-    fun toggle(){
-        state=!state
+    fun toggle() {
+        state = !state
     }
 
     fun getValues() = javaClass.declaredFields.map { field ->

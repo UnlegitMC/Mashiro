@@ -7,23 +7,23 @@ import me.liuli.mashiro.module.ModuleCategory
 import me.liuli.mashiro.module.value.BoolValue
 import net.minecraft.potion.Potion
 
-//Not compiled, built by BRAIN-DEVELOPMENT-KIT XD
-class Sprint : Module("Sprint","Automatically make you sprint", ModuleCategory.MOVEMENT) {
-    //private val allDirectionValue=BoolValue("AllDirections",false);
-    private val legitMode=BoolValue("LegitMode",true);
-    
+// Not compiled, built by BRAIN-DEVELOPMENT-KIT XD
+class Sprint : Module("Sprint", "Automatically make you sprint", ModuleCategory.MOVEMENT) {
+    // private val allDirectionValue=BoolValue("AllDirections",false);
+    private val legitMode = BoolValue("LegitMode", true)
+
     @EventMethod
-    fun onUpdate(event: UpdateEvent){
-        
-        if(legitMode.get()){
-            if(!mc.thePlayer.isPotionActive(Potion.blindness) && mc.thePlayer.foodStats.foodLevel > 6.0f && !mc.thePlayer.isSneaking()){
-                if(mc.thePlayer.movementInput.moveForward==1.0f){
-                    mc.thePlayer.isSprinting=true;
+    fun onUpdate(event: UpdateEvent) {
+
+        if (legitMode.get()) {
+            if (!mc.thePlayer.isPotionActive(Potion.blindness) && mc.thePlayer.foodStats.foodLevel > 6.0f && !mc.thePlayer.isSneaking()) {
+                if (mc.thePlayer.movementInput.moveForward == 1.0f) {
+                    mc.thePlayer.isSprinting = true
                 }
             }
-        }else{
-            mc.thePlayer.isSprinting=true;
+        } else {
+            mc.thePlayer.isSprinting = true
         }
-        
+
     }
 }

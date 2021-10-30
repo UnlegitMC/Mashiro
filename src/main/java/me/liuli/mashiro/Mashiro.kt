@@ -4,7 +4,6 @@ import me.liuli.mashiro.command.CommandManager
 import me.liuli.mashiro.config.ConfigManager
 import me.liuli.mashiro.config.FileManager
 import me.liuli.mashiro.event.EventManager
-import me.liuli.mashiro.gui.alt.AltManager
 import me.liuli.mashiro.gui.client.GuiLoadingClient
 import me.liuli.mashiro.gui.font.FontManager
 import me.liuli.mashiro.module.ModuleManager
@@ -13,29 +12,28 @@ import me.liuli.mashiro.util.client.ClientUtils
 
 object Mashiro : MinecraftInstance() {
     @JvmStatic
-    val name="Mashiro"
+    val name = "Mashiro"
     @JvmStatic
-    val coloredName="§eM§fashiro"
+    val coloredName = "§eM§fashiro"
     @JvmStatic
-    val version="0.0.2"
+    val version = "1.0.0"
     @JvmStatic
-    val author="Liulihaocai"
+    val author = "Liulihaocai"
 
     lateinit var eventManager: EventManager
     lateinit var configManager: ConfigManager
     lateinit var commandManager: CommandManager
     lateinit var moduleManager: ModuleManager
     lateinit var fontManager: FontManager
-    lateinit var altManager: AltManager
     lateinit var fileManager: FileManager
 
-    fun init(){
+    fun init() {
         ClientUtils.logInfo("Initialize $name v$version")
         eventManager = EventManager()
     }
 
-    fun load(){
-        val gui=GuiLoadingClient()
+    fun load() {
+        val gui = GuiLoadingClient()
         mc.displayGuiScreen(gui)
 
         ClientUtils.logInfo("Loading $name v$version")
@@ -43,35 +41,32 @@ object Mashiro : MinecraftInstance() {
 
         fileManager = FileManager()
 
-        gui.displayString="config"
+        gui.displayString = "config"
         configManager = ConfigManager()
         eventManager.registerListener(configManager)
 
-        gui.displayString="command"
+        gui.displayString = "command"
         commandManager = CommandManager()
 
-        gui.displayString="module"
+        gui.displayString = "module"
         moduleManager = ModuleManager()
         eventManager.registerListener(moduleManager)
 
-        gui.displayString="font"
+        gui.displayString = "font"
         fontManager = FontManager()
         fontManager.loadFonts()
 
-        gui.displayString="renderer"
+        gui.displayString = "renderer"
         ClientUtils.disableFastRender()
-
-        gui.displayString="other things"
-        altManager = AltManager()
 
         configManager.loadDefault()
 
         ClientUtils.setTitle(null)
 
-        gui.ok=true
+        gui.ok = true
     }
 
-    fun shutdown(){
+    fun shutdown() {
         configManager.save()
     }
 }

@@ -8,12 +8,12 @@ import me.liuli.mashiro.module.ModuleCategory
 import net.minecraft.util.BlockPos
 import net.minecraft.init.Blocks
 
-//Not compiled, built by BRAIN-DEVELOPMENT-KIT XD
-class LegitSafeWalk : Module("LegitSafeWalk","Automatically make you walk safely", ModuleCategory.MOVEMENT) {
-    
+// Not compiled, built by BRAIN-DEVELOPMENT-KIT XD
+class LegitSafeWalk : Module("LegitSafeWalk", "Automatically make you walk safely", ModuleCategory.MOVEMENT) {
+
     @EventMethod
-    fun onUpdate(event: UpdateEvent){
-        var underBlock=mc.theWorld.getBlockState(BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1.0, mc.thePlayer.posZ)).block;
-        mc.gameSettings.keyBindSneak.pressed=(underBlock == Blocks.air);
+    fun onUpdate(event: UpdateEvent) {
+        var underBlock = mc.theWorld.getBlockState(BlockPos(mc.thePlayer.posX, mc.thePlayer.posY - 1.0, mc.thePlayer.posZ)).block
+        mc.gameSettings.keyBindSneak.pressed = (underBlock == Blocks.air)
     }
 }

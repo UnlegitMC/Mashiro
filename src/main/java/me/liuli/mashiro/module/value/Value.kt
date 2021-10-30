@@ -4,7 +4,7 @@ import com.google.gson.JsonElement
 import me.liuli.mashiro.util.client.ClientUtils
 
 abstract class Value<T>(val name: String, protected var value: T) {
-    val defaultValue=value
+    val defaultValue = value
 
     fun set(newValue: T) {
         if (newValue == value) return
@@ -27,7 +27,7 @@ abstract class Value<T>(val name: String, protected var value: T) {
     }
 
     open fun reset() {
-        value=defaultValue
+        value = defaultValue
     }
 
     abstract fun toJson(): JsonElement?

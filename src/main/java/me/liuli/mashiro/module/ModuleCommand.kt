@@ -17,9 +17,7 @@ class ModuleCommand(private val module: Module, private val values: List<Value<*
      */
     override fun exec(args: Array<String>) {
         val valueNames = values
-            .joinToString(separator = "/") { it.name.toLowerCase() }
-
-        val moduleName = module.name.toLowerCase()
+            .joinToString(separator = "/") { it.name.lowercase() }
 
         if (args.isEmpty()) {
             chatSyntax(if (values.size == 1) "$valueNames <value>" else "<$valueNames>")
@@ -35,11 +33,11 @@ class ModuleCommand(private val module: Module, private val values: List<Value<*
 
         if (args.size < 2) {
             if (value is IntValue || value is FloatValue || value is StringValue || value is BoolValue) {
-                chatSyntax("${args[0].toLowerCase()} <value> (now=${value.get()})")
-            }else if (value is ListValue) {
-                chatSyntax("${args[0].toLowerCase()} <${value.values.joinToString(separator = "/").toLowerCase()}> (now=${value.get()})")
-            }else if (value is BlockValue) {
-                chatSyntax("${args[0].toLowerCase()} <block> (now=${BlockUtils.getBlockName(value.get())})")
+                chatSyntax("${args[0].lowercase()} <value> (now=${value.get()})")
+            } else if (value is ListValue) {
+                chatSyntax("${args[0].lowercase()} <${value.values.joinToString(separator = "/").lowercase()}> (now=${value.get()})")
+            } else if (value is BlockValue) {
+                chatSyntax("${args[0].lowercase()} <block> (now=${BlockUtils.getBlockName(value.get())})")
             }
             return
         }
@@ -61,21 +59,21 @@ class ModuleCommand(private val module: Module, private val values: List<Value<*
                     }
 
                     value.set(id)
-                    chat("${module.name} ${args[0].toLowerCase()} was set to ${BlockUtils.getBlockName(id)}.")
+                    chat("${module.name} ${args[0].lowercase()} was set to ${BlockUtils.getBlockName(id)}.")
                     return
                 }
                 is IntValue -> value.set(args[1].toInt())
                 is FloatValue -> value.set(args[1].toFloat())
                 is BoolValue -> {
-                    when(args[1].toLowerCase()){
-                        "on","true" -> value.set(true)
-                        "off","false" -> value.set(false)
+                    when (args[1].lowercase()) {
+                        "on", "true" -> value.set(true)
+                        "off", "false" -> value.set(false)
                         else -> value.set(!value.get())
                     }
                 }
                 is ListValue -> {
                     if (!value.contains(args[1])) {
-                        chatSyntax("${args[0].toLowerCase()} <${value.values.joinToString(separator = "/").toLowerCase()}>")
+                        chatSyntax("${args[0].lowercase()} <${value.values.joinToString(separator = "/").lowercase()}>")
                         return
                     }
 
@@ -96,20 +94,22 @@ class ModuleCommand(private val module: Module, private val values: List<Value<*
         return when (args.size) {
             1 -> values
                 .filter { it.name.startsWith(args[0], true) }
-                .map { it.name.toLowerCase() }
+                .map { it.name.lowercase() }
             2 -> {
-                when(module.getValue(args[0])) {
+                when (module.getValue(args[0])) {
                     is BlockValue -> {
                         return Block.blockRegistry.keys
-                            .map { it.resourcePath.toLowerCase() }
+                            .map { it.resourcePath.lowercase() }
                             .filter { it.startsWith(args[1], true) }
                     }
                     is ListValue -> {
                         values.forEach { value ->
-                            if (!value.name.equals(args[0], true))
+                            if (!value.name.equals(args[0], true)) {
                                 return@forEach
-                            if (value is ListValue)
+                            }
+                            if (value is ListValue) {
                                 return value.values.filter { it.startsWith(args[1], true) }
+                            }
                         }
                         return emptyList()
                     }

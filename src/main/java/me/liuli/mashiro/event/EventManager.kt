@@ -3,7 +3,7 @@ package me.liuli.mashiro.event
 import java.lang.reflect.Method
 
 class EventManager {
-    private val methods=mutableListOf<ListenerMethod>()
+    private val methods = mutableListOf<ListenerMethod>()
 
     fun registerListener(listener: Listener) {
         for (method in listener.javaClass.declaredMethods) {
@@ -19,7 +19,7 @@ class EventManager {
                 try {
                     lm.method.invoke(lm.listener, event)
                 } catch (t: Throwable) {
-                    Exception("An error occurred while handling the event: ",t).printStackTrace()
+                    Exception("An error occurred while handling the event: ", t).printStackTrace()
                 }
             }
         }
@@ -28,8 +28,9 @@ class EventManager {
 
 class ListenerMethod(val method: Method, val listener: Listener) {
     init {
-        if(!method.isAccessible)
-            method.isAccessible=true
+        if (!method.isAccessible) {
+            method.isAccessible = true
+        }
     }
 
     fun isMatchEvent(event: Event): Boolean {

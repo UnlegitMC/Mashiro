@@ -3,19 +3,20 @@ package me.liuli.mashiro.command.commands
 import me.liuli.mashiro.Mashiro
 import me.liuli.mashiro.command.Command
 
-class ToggleCommand : Command("toggle","Allow you toggle modules without open ClickGui", arrayOf("t")) {
+class ToggleCommand : Command("toggle", "Allow you toggle modules without open ClickGui", arrayOf("t")) {
     override fun exec(args: Array<String>) {
-        if(args.isNotEmpty()){
+        if (args.isNotEmpty()) {
             args.forEach {
-                if(it.isBlank())
+                if (it.isBlank()) {
                     return@forEach
+                }
 
-                val module=Mashiro.moduleManager.getModule(it)
-                if(module==null){
+                val module = Mashiro.moduleManager.getModule(it)
+                if (module == null) {
                     chat("Module \"$it\" not found.")
-                }else{
+                } else {
                     module.toggle()
-                    chat("Toggled module \"${module.name}\" ${if(module.state){"§aON"}else{"§cOFF"}}")
+                    chat("Toggled module \"${module.name}\" ${if (module.state){"§aON"}else {"§cOFF"}}")
                 }
             }
             return

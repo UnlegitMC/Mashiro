@@ -6,21 +6,20 @@ import me.liuli.mashiro.module.Module
 import me.liuli.mashiro.module.ModuleCategory
 import net.minecraft.potion.Potion
 
-//Not compiled, built by BRAIN-DEVELOPMENT-KIT XD
-class LegitSpeed : Module("LegitSpeed","Automatically make you fast", ModuleCategory.MOVEMENT) {
-    
+// Not compiled, built by BRAIN-DEVELOPMENT-KIT XD
+class LegitSpeed : Module("LegitSpeed", "Automatically make you fast", ModuleCategory.MOVEMENT) {
+
     @EventMethod
-    fun onUpdate(event: UpdateEvent){
+    fun onUpdate(event: UpdateEvent) {
         // Force sprint
-        if(!mc.thePlayer.isPotionActive(Potion.blindness) && mc.thePlayer.foodStats.foodLevel > 6.0f && !mc.thePlayer.isSneaking()){
-            if(mc.thePlayer.movementInput.moveForward==1.0f){
-                mc.thePlayer.isSprinting=true;
+        if (!mc.thePlayer.isPotionActive(Potion.blindness) && mc.thePlayer.foodStats.foodLevel > 6.0f && !mc.thePlayer.isSneaking()) {
+            if (mc.thePlayer.movementInput.moveForward == 1.0f) {
+                mc.thePlayer.isSprinting = true
             }
         }
-        
-        if(mc.thePlayer.onGround && !mc.thePlayer.isInWater() && !mc.thePlayer.isInLava()){
-            mc.thePlayer.jump();
+
+        if (mc.thePlayer.onGround && !mc.thePlayer.isInWater() && !mc.thePlayer.isInLava()) {
+            mc.thePlayer.jump()
         }
-        
     }
 }

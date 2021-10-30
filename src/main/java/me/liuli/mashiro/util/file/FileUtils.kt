@@ -3,7 +3,6 @@ package me.liuli.mashiro.util.file
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.io.InputStream
 import java.util.zip.ZipInputStream
 
 object FileUtils {
@@ -11,7 +10,7 @@ object FileUtils {
      * @author CCBlueX
      */
     fun extractZip(zipFile: File, folder: File) {
-        val zipStream=FileInputStream(zipFile)
+        val zipStream = FileInputStream(zipFile)
         if (!folder.exists()) {
             folder.mkdir()
         }

@@ -9,9 +9,9 @@ import org.lwjgl.input.Keyboard
 import org.reflections.Reflections
 
 class ModuleManager : Listener {
-    val modules=mutableListOf<Module>()
+    val modules = mutableListOf<Module>()
 
-    private var pendingKeyBindModule:Module?=null
+    private var pendingKeyBindModule: Module? = null
 
     init {
         val reflections = Reflections("${this.javaClass.`package`.name}.modules")
@@ -25,39 +25,40 @@ class ModuleManager : Listener {
         }
     }
 
-    fun registerModule(module: Module){
+    fun registerModule(module: Module) {
         modules.add(module)
         Mashiro.eventManager.registerListener(module)
 
         // module command
-        val values=module.getValues()
-        if(module.command&&values.isNotEmpty()){
+        val values = module.getValues()
+        if (module.command && values.isNotEmpty()) {
             Mashiro.commandManager.registerCommand(ModuleCommand(module, values))
         }
     }
 
-    fun getModule(name: String):Module?{
+    fun getModule(name: String): Module? {
         modules.forEach {
-            if(it.name.equals(name,ignoreCase = true))
+            if (it.name.equals(name, ignoreCase = true)) {
                 return it
+            }
         }
         return null
     }
 
     @EventMethod
     private fun onKey(event: KeyEvent) {
-        if(pendingKeyBindModule!=null){
-            pendingKeyBindModule!!.keyBind=event.key
+        if (pendingKeyBindModule != null) {
+            pendingKeyBindModule!!.keyBind = event.key
             ClientUtils.displayAlert("Bound module §l${pendingKeyBindModule!!.name}§r to key §l${Keyboard.getKeyName(event.key)}§r.")
-            pendingKeyBindModule=null
+            pendingKeyBindModule = null
             return
         }
 
         modules.filter { it.keyBind == event.key }.forEach { it.toggle() }
     }
 
-    fun pendKeyBind(module: Module){
-        pendingKeyBindModule=module
+    fun pendKeyBind(module: Module) {
+        pendingKeyBindModule = module
         ClientUtils.displayAlert("Press ANY key to set §l${module.name}§r key bind.")
     }
 

@@ -14,7 +14,7 @@ import net.minecraft.util.*
 import org.lwjgl.opengl.GL11
 import java.awt.Color
 
-class Projectiles : Module("Projectiles","Allows you to see where arrows will land", ModuleCategory.RENDER) {
+class Projectiles : Module("Projectiles", "Allows you to see where arrows will land", ModuleCategory.RENDER) {
     @EventMethod
     fun onRender3D(event: Render3DEvent) {
         mc.thePlayer.heldItem ?: return
@@ -36,11 +36,13 @@ class Projectiles : Module("Projectiles","Allows you to see where arrows will la
             // Calculate power of bow
             var power = (if (mc.thePlayer.isUsingItem) mc.thePlayer.itemInUseDuration else item.getMaxItemUseDuration(ItemStack(item))) / 20f
             power = (power * power + power * 2F) / 3F
-            if (power < 0.1F)
+            if (power < 0.1F) {
                 return
+            }
 
-            if (power > 1F)
+            if (power > 1F) {
                 power = 1F
+            }
 
             motionFactor = power * 3F
         } else if (item is ItemFishingRod) {
@@ -52,8 +54,9 @@ class Projectiles : Module("Projectiles","Allows you to see where arrows will la
             size = 0.25F
             motionFactor = 0.5F
         } else {
-            if (item !is ItemSnowball && item !is ItemEnderPearl && item !is ItemEgg)
+            if (item !is ItemSnowball && item !is ItemEnderPearl && item !is ItemEgg) {
                 return
+            }
 
             gravity = 0.03F
             size = 0.25F
@@ -70,13 +73,13 @@ class Projectiles : Module("Projectiles","Allows you to see where arrows will la
         var posZ = renderManager.renderPosZ - MathHelper.sin(yaw / 180F * 3.1415927F) * 0.16F
 
         // Motions
-        var motionX = (-MathHelper.sin(yaw / 180f * 3.1415927F) * MathHelper.cos(pitch / 180F * 3.1415927F)
-                * if (isBow) 1.0 else 0.4)
+        var motionX = (-MathHelper.sin(yaw / 180f * 3.1415927F) * MathHelper.cos(pitch / 180F * 3.1415927F) *
+                if (isBow) 1.0 else 0.4)
         var motionY = -MathHelper.sin((pitch +
-                if (item is ItemPotion && ItemPotion.isSplash(mc.thePlayer.heldItem.itemDamage)) -20 else 0)
-                / 180f * 3.1415927f) * if (isBow) 1.0 else 0.4
-        var motionZ = (MathHelper.cos(yaw / 180f * 3.1415927F) * MathHelper.cos(pitch / 180F * 3.1415927F)
-                * if (isBow) 1.0 else 0.4)
+                if (item is ItemPotion && ItemPotion.isSplash(mc.thePlayer.heldItem.itemDamage)) -20 else 0) /
+                180f * 3.1415927f) * if (isBow) 1.0 else 0.4
+        var motionZ = (MathHelper.cos(yaw / 180f * 3.1415927F) * MathHelper.cos(pitch / 180F * 3.1415927F) *
+                if (isBow) 1.0 else 0.4)
         val distance = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ)
 
         motionX /= distance
@@ -93,7 +96,7 @@ class Projectiles : Module("Projectiles","Allows you to see where arrows will la
 
         val tessellator = Tessellator.getInstance()
         val worldRenderer = tessellator.worldRenderer
-        val pos=mutableListOf<Vec3>()
+        val pos = mutableListOf<Vec3>()
 
         // calc path
         while (!hasLanded && posY > 0.0) {
@@ -175,13 +178,13 @@ class Projectiles : Module("Projectiles","Allows you to see where arrows will la
         RenderUtils.disableGlCap(GL11.GL_DEPTH_TEST, GL11.GL_ALPHA_TEST, GL11.GL_TEXTURE_2D)
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
         GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST)
-        RenderUtils.glColor(if(hitEntity){Color(255,140,140)}else{Color(140,255,140)})
+        RenderUtils.glColor(if (hitEntity) { Color(255, 140, 140) } else { Color(140, 255, 140) })
         GL11.glLineWidth(2f)
 
         worldRenderer.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION)
 
         pos.forEach {
-            worldRenderer.pos(it.xCoord,it.yCoord,it.zCoord).endVertex()
+            worldRenderer.pos(it.xCoord, it.yCoord, it.zCoord).endVertex()
         }
 
         // End the rendering of the path
@@ -190,14 +193,13 @@ class Projectiles : Module("Projectiles","Allows you to see where arrows will la
         GL11.glTranslated(posX - renderManager.renderPosX, posY - renderManager.renderPosY,
             posZ - renderManager.renderPosZ)
 
-        if(landingPosition!=null){
+        if (landingPosition != null) {
             when (landingPosition.sideHit.axis.ordinal) {
                 0 -> GL11.glRotatef(90F, 0F, 0F, 1F)
                 2 -> GL11.glRotatef(90F, 1F, 0F, 0F)
             }
 
-            RenderUtils.drawAxisAlignedBB(AxisAlignedBB(-0.5,0.0,-0.5,0.5,0.1,0.5),if(hitEntity){Color(255,140,140)}else{Color(140,255,140)},true,true,3f)
-
+            RenderUtils.drawAxisAlignedBB(AxisAlignedBB(-0.5, 0.0, -0.5, 0.5, 0.1, 0.5), if (hitEntity) { Color(255, 140, 140) } else { Color(140, 255, 140) }, true, true, 3f)
         }
         GL11.glPopMatrix()
         GL11.glDepthMask(true)

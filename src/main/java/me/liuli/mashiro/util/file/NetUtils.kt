@@ -6,13 +6,14 @@ import java.net.URL
 import java.nio.file.Files
 
 object NetUtils {
-    fun downloadFile(url: URL, file: File){
+    fun downloadFile(url: URL, file: File) {
         val httpurlconnection = url.openConnection() as HttpURLConnection
         httpurlconnection.requestMethod = "GET"
 
-        if(file.exists())
+        if (file.exists()) {
             file.delete()
+        }
 
-        Files.copy(httpurlconnection.inputStream,file.toPath())
+        Files.copy(httpurlconnection.inputStream, file.toPath())
     }
 }
