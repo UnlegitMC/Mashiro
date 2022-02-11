@@ -33,37 +33,27 @@ object Mashiro : MinecraftInstance() {
     }
 
     fun load() {
-        val gui = GuiLoadingClient()
-        mc.displayGuiScreen(gui)
-
         ClientUtils.logInfo("Loading $name v$version")
         ClientUtils.setTitle("Loading Client...")
 
         fileManager = FileManager()
 
-        gui.displayString = "config"
         configManager = ConfigManager()
         eventManager.registerListener(configManager)
 
-        gui.displayString = "command"
         commandManager = CommandManager()
 
-        gui.displayString = "module"
         moduleManager = ModuleManager()
         eventManager.registerListener(moduleManager)
 
-        gui.displayString = "font"
         fontManager = FontManager()
         fontManager.loadFonts()
 
-        gui.displayString = "renderer"
         ClientUtils.disableFastRender()
 
         configManager.loadDefault()
 
         ClientUtils.setTitle(null)
-
-        gui.ok = true
     }
 
     fun shutdown() {

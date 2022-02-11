@@ -62,14 +62,7 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "startGame", at = @At("RETURN"))
     private void startGame(CallbackInfo callbackInfo) {
-        new Thread(() -> {
-            try{
-                Mashiro.INSTANCE.load();
-            }catch (Throwable t){
-                t.printStackTrace();
-                displayGuiScreen(new GuiLoadingClient(t));
-            }
-        }).start();
+        Mashiro.INSTANCE.load();
     }
 
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;dispatchKeypresses()V", shift = At.Shift.AFTER))
